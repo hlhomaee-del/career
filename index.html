@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Clusters Interactive Teaching & Learning Lab</title>
+<style>
+:root {
+  --blue: #1a6bcc; --blue-light: #e8f2ff; --blue-mid: #4a90d9;
+  --green: #1e8c4a; --green-light: #e6f7ed; --green-mid: #3aad6a;
+  --yellow: #d4920a; --yellow-light: #fff8e1; --yellow-mid: #f5c842;
+  --purple: #7b3fa0; --purple-light: #f3e8ff; --purple-mid: #a366cc;
+  --orange: #d45f0a; --orange-light: #fff1e6; --orange-mid: #f0872e;
+  --red: #c0392b; --teal: #0d7377; --teal-light: #e0f5f5;
+  --dark: #1a1a2e; --mid: #3d3d5c; --muted: #6b7280;
+  --bg: #f7f8fc; --white: #ffffff; --border: #e2e8f0;
+  --radius: 12px; --shadow: 0 2px 12px rgba(0,0,0,.1);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.15);
+  --font-head: 'Georgia', 'Times New Roman', serif;
+  --font-body: 'Segoe UI', system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--dark);line-height:1.6;min-height:100vh}
+
+/* ── TOP NAV ── */
+#topbar{background:linear-gradient(135deg,#1a1a2e 0%,#2d3561 50%,#1a6bcc 100%);color:#fff;padding:0;position:sticky;top:0;z-index:1000;box-shadow:0 3px 16px rgba(0,0,0,.4)}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;flex-wrap:wrap;gap:8px}
+.site-title{font-family:var(--font-head);font-size:1.1rem;font-weight:700;letter-spacing:.5px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.4)}
+.site-title span{color:#f5c842;display:block;font-size:.7rem;font-family:var(--font-body);letter-spacing:1px;text-transform:uppercase;font-weight:400}
+.nav-tabs{display:flex;gap:2px;flex-wrap:wrap;list-style:none}
+.nav-tabs li a{display:block;padding:7px 11px;border-radius:8px;color:rgba(255,255,255,.8);font-size:.75rem;font-weight:600;text-decoration:none;cursor:pointer;transition:all .2s;white-space:nowrap;letter-spacing:.3px}
+.nav-tabs li a:hover,.nav-tabs li a.active{background:rgba(255,255,255,.18);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.nav-tabs li a.active{background:rgba(245,200,66,.25);color:#f5c842}
+.view-toggle{display:flex;gap:6px;align-items:center}
+.view-btn{padding:6px 14px;border-radius:20px;border:2px solid rgba(255,255,255,.3);background:transparent;color:#fff;font-size:.75rem;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.5px}
+.view-btn.active,.view-btn:hover{background:rgba(255,255,255,.15);border-color:#f5c842;color:#f5c842}
+#search-bar{display:none;padding:8px 16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;color:#fff;font-size:.8rem;width:200px;outline:none}
+#search-bar::placeholder{color:rgba(255,255,255,.5)}
+#search-bar:focus{background:rgba(255,255,255,.15);border-color:#f5c842}
+
+/* ── SECTIONS ── */
+.section{display:none;padding:28px 24px;max-width:1100px;margin:0 auto;animation:fadeIn .4s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:18px}
+.card-blue{border-left:5px solid var(--blue)}
+.card-green{border-left:5px solid var(--green)}
+.card-yellow{border-left:5px solid var(--yellow)}
+.card-purple{border-left:5px solid var(--purple)}
+.card-orange{border-left:5px solid var(--orange)}
+.card-teal{border-left:5px solid var(--teal)}
+
+/* ── BADGES / CHIPS ── */
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.badge-blue{background:var(--blue-light);color:var(--blue)}
+.badge-green{background:var(--green-light);color:var(--green)}
+.badge-yellow{background:var(--yellow-light);color:var(--yellow)}
+.badge-purple{background:var(--purple-light);color:var(--purple)}
+.badge-orange{background:var(--orange-light);color:var(--orange)}
+
+/* ── HEADINGS ── */
+.sec-header{margin-bottom:24px}
+.sec-header h2{font-family:var(--font-head);font-size:1.9rem;color:var(--dark);margin-bottom:6px}
+.sec-header p{color:var(--muted);font-size:.95rem}
+.sec-header .divider{height:4px;width:60px;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--purple));margin-top:10px}
+
+/* ── TABS (inner) ── */
+.tab-group{margin-bottom:20px}
+.tab-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;border-bottom:2px solid var(--border);padding-bottom:6px}
+.tab-btn{padding:8px 16px;border-radius:8px 8px 0 0;border:none;background:transparent;font-size:.85rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s}
+.tab-btn.active,.tab-btn:hover{background:var(--blue-light);color:var(--blue)}
+.tab-btn.active{border-bottom:3px solid var(--blue)}
+.tab-panel{display:none}.tab-panel.active{display:block;animation:fadeIn .3s}
+
+/* ── ACCORDION ── */
+.accordion{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
+.acc-header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;cursor:pointer;background:var(--white);font-weight:600;font-size:.92rem;transition:background .2s;user-select:none}
+.acc-header:hover{background:#f0f4ff}
+.acc-header.open{background:var(--blue-light);color:var(--blue)}
+.acc-icon{font-size:1.1rem;transition:transform .3s;color:var(--muted)}
+.acc-header.open .acc-icon{transform:rotate(180deg);color:var(--blue)}
+.acc-body{display:none;padding:18px;background:var(--white);border-top:1px solid var(--border);animation:fadeIn .3s}
+.acc-body.open{display:block}
+
+/* ── FLASHCARDS ── */
+.flashcard-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin:16px 0}
+.flashcard{perspective:600px;cursor:pointer;height:140px}
+.fc-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .5s}
+.flashcard.flipped .fc-inner{transform:rotateY(180deg)}
+.fc-front,.fc-back{position:absolute;inset:0;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:14px;backface-visibility:hidden;font-size:.88rem;font-weight:600;text-align:center}
+.fc-front{background:linear-gradient(135deg,var(--blue),var(--blue-mid));color:#fff;box-shadow:var(--shadow)}
+.fc-back{background:linear-gradient(135deg,var(--green),var(--green-mid));color:#fff;transform:rotateY(180deg);font-weight:400;font-size:.82rem}
+
+/* ── DRAG DROP ── */
+.drag-area{min-height:80px;border:2px dashed var(--border);border-radius:10px;padding:12px;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start;transition:all .2s}
+.drag-area.over{border-color:var(--blue);background:var(--blue-light)}
+.drag-card{padding:8px 14px;background:var(--white);border:1.5px solid var(--border);border-radius:8px;cursor:grab;font-size:.82rem;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.08);transition:all .2s;user-select:none}
+.drag-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.drag-card.dragging{opacity:.5;cursor:grabbing}
+
+/* ── QUIZ ── */
+.quiz-q{margin-bottom:20px}
+.quiz-q p{font-weight:600;margin-bottom:10px}
+.quiz-opts label{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;margin-bottom:6px;cursor:pointer;transition:background .15s;font-size:.9rem}
+.quiz-opts label:hover{background:var(--blue-light)}
+.quiz-opts input[type=radio]{accent-color:var(--blue)}
+.quiz-result{padding:12px 16px;border-radius:8px;margin-top:10px;font-weight:600;font-size:.9rem;display:none}
+.quiz-result.correct{background:var(--green-light);color:var(--green);border:1px solid var(--green)}
+.quiz-result.wrong{background:var(--orange-light);color:var(--orange);border:1px solid var(--orange)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:10px;border:none;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.3px;text-decoration:none}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue-mid));color:#fff;box-shadow:0 3px 12px rgba(26,107,204,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 5px 16px rgba(26,107,204,.45)}
+.btn-green{background:linear-gradient(135deg,var(--green),var(--green-mid));color:#fff;box-shadow:0 3px 12px rgba(30,140,74,.3)}
+.btn-green:hover{transform:translateY(-2px)}
+.btn-purple{background:linear-gradient(135deg,var(--purple),var(--purple-mid));color:#fff}
+.btn-orange{background:linear(135deg,var(--orange),var(--orange-mid));background:linear-gradient(135deg,var(--orange),var(--orange-mid));color:#fff}
+.btn-outline{background:transparent;border:2px solid var(--blue);color:var(--blue)}
+.btn-outline:hover{background:var(--blue-light)}
+.btn-sm{padding:7px 14px;font-size:.8rem}
+.btn-lg{padding:14px 28px;font-size:1rem;border-radius:12px}
+
+/* ── CALLOUTS ── */
+.callout{border-radius:10px;padding:14px 18px;margin:14px 0;font-size:.9rem}
+.tip{background:var(--blue-light);border-left:4px solid var(--blue);color:var(--dark)}
+.tip::before{content:"💡 Teacher Tip: ";font-weight:700;color:var(--blue)}
+.challenge{background:var(--green-light);border-left:4px solid var(--green);color:var(--dark)}
+.challenge::before{content:"🏆 Student Challenge: ";font-weight:700;color:var(--green)}
+.why-matters{background:var(--yellow-light);border-left:4px solid var(--yellow);color:var(--dark)}
+.why-matters::before{content:"⭐ Why This Matters: ";font-weight:700;color:var(--yellow)}
+.real-world{background:var(--teal-light);border-left:4px solid var(--teal);color:var(--dark)}
+.real-world::before{content:"🌍 Real-World Relevance: ";font-weight:700;color:var(--teal)}
+.warning{background:var(--yellow-light);border-left:4px solid var(--yellow-mid);color:var(--dark)}
+.warning::before{content:"⚠️ Note: ";font-weight:700;color:var(--yellow)}
+
+/* ── HOVER GLOSSARY ── */
+.glossterm{border-bottom:2px dotted var(--blue);cursor:help;position:relative;color:var(--blue);font-weight:600}
+.glossterm .tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--dark);color:#fff;padding:8px 12px;border-radius:8px;font-size:.78rem;font-weight:400;white-space:nowrap;max-width:240px;white-space:normal;z-index:900;display:none;box-shadow:var(--shadow-lg);pointer-events:none}
+.glossterm:hover .tooltip{display:block}
+
+/* ── GRID HELPERS ── */
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.flex{display:flex;flex-wrap:wrap;gap:12px}
+.flex-center{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px}
+
+/* ── CLUSTER ICON CARDS ── */
+.cluster-card{background:var(--white);border-radius:var(--radius);padding:18px 14px;text-align:center;box-shadow:var(--shadow);border-top:4px solid var(--blue);transition:transform .2s,box-shadow .2s;cursor:pointer}
+.cluster-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.cluster-card .icon{font-size:2.2rem;margin-bottom:8px}
+.cluster-card h4{font-size:.82rem;font-weight:700;color:var(--dark);line-height:1.3}
+.cluster-card p{font-size:.74rem;color:var(--muted);margin-top:4px}
+
+/* ── PROGRESS ── */
+.progress-bar{height:12px;border-radius:6px;background:#e2e8f0;overflow:hidden;margin:8px 0}
+.progress-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width .8s ease}
+.badge-earned{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#f5c842,#f0872e);color:#fff;border-radius:20px;font-weight:700;font-size:.82rem;box-shadow:0 3px 10px rgba(245,200,66,.4);animation:popIn .4s ease}
+@keyframes popIn{from{transform:scale(0.5);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* ── PRINT ── */
+@media print{
+  #topbar,#progress-tracker,.btn,.no-print{display:none!important}
+  .section{display:block!important;break-inside:avoid}
+  .card{box-shadow:none;border:1px solid #ccc}
+}
+
+/* ── TABLES ── */
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88rem}
+th{background:var(--dark);color:#fff;padding:10px 12px;text-align:left;font-size:.82rem;letter-spacing:.5px}
+td{padding:9px 12px;border-bottom:1px solid var(--border)}
+tr:nth-child(even) td{background:#f8f9ff}
+tr:hover td{background:var(--blue-light)}
+
+/* ── WRITING AREA ── */
+.writing-box{width:100%;min-height:120px;border:2px solid var(--border);border-radius:10px;padding:14px;font-family:var(--font-body);font-size:.9rem;resize:vertical;outline:none;transition:border .2s;background:var(--white)}
+.writing-box:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-light)}
+
+/* ── TIMER ── */
+.timer-display{font-family:var(--font-head);font-size:2.5rem;font-weight:700;color:var(--blue);text-align:center;padding:12px 0}
+.timer-display.urgent{color:var(--red);animation:pulse .5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* ── MISC ── */
+.divider-line{height:1px;background:var(--border);margin:20px 0}
+.tag{display:inline-block;padding:2px 8px;border-radius:12px;font-size:.72rem;font-weight:600;background:var(--blue-light);color:var(--blue);margin:2px}
+.highlight{background:linear-gradient(135deg,transparent 60%,#fff3cd 60%);padding:2px 4px}
+.text-muted{color:var(--muted);font-size:.88rem}
+.text-small{font-size:.82rem}
+.mb-8{margin-bottom:8px}.mb-16{margin-bottom:16px}.mb-24{margin-bottom:24px}
+.mt-8{margin-top:8px}.mt-16{margin-top:16px}
+ul.styled,ol.styled{padding-left:20px;margin:10px 0}
+ul.styled li,ol.styled li{margin-bottom:6px;font-size:.9rem;line-height:1.5}
+ul.styled li::marker{color:var(--blue)}
+ol.styled li::marker{color:var(--blue);font-weight:700}
+.two-col{columns:2;gap:20px}
+@media(max-width:600px){.two-col{columns:1}.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}.nav-tabs{gap:2px}}
+
+/* ── RUBRIC ── */
+.rubric table th:first-child{width:22%}.rubric table th{text-align:center;font-size:.78rem}
+.rubric td{text-align:center;font-size:.8rem;vertical-align:top;padding:8px 6px}
+.rubric td:first-child{text-align:left;font-weight:600}
+.score-4{background:#d5f5e3}.score-3{background:#d6eaf8}.score-2{background:#fff8e1}.score-1{background:#fdecea}
+
+/* ── HERO (Section 1) ── */
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#2d3561 40%,#1a6bcc 100%);border-radius:20px;padding:48px 36px;text-align:center;color:#fff;margin-bottom:28px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero h1{font-family:var(--font-head);font-size:2.4rem;margin-bottom:10px;text-shadow:0 2px 8px rgba(0,0,0,.4);position:relative}
+.hero h1 span{color:#f5c842}
+.hero p{font-size:1.05rem;opacity:.9;max-width:620px;margin:0 auto 24px;position:relative}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
+.hero-credit{font-size:.75rem;opacity:.6;margin-top:20px;position:relative}
+
+/* ── INTEREST POLL ── */
+.poll-options{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.poll-opt{padding:10px 18px;border-radius:25px;border:2.5px solid var(--border);background:var(--white);font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s}
+.poll-opt:hover{border-color:var(--blue);background:var(--blue-light);color:var(--blue)}
+.poll-opt.selected{border-color:var(--blue);background:var(--blue);color:#fff}
+.poll-bar-wrap{margin:6px 0}
+.poll-bar-label{font-size:.8rem;margin-bottom:3px}
+.poll-bar{height:22px;border-radius:11px;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width 1s ease;min-width:30px;display:flex;align-items:center;padding:0 10px;color:#fff;font-size:.75rem;font-weight:700}
+
+/* ── VIEW TOGGLE ── */
+.teacher-only{display:block}
+.student-only{display:block}
+body.student-view .teacher-only{display:none}
+body.student-view .student-only{display:block}
+body.teacher-view .student-only{display:none}
+body.teacher-view .teacher-only{display:block}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--white);border-radius:16px;padding:32px;max-width:600px;width:100%;max-height:80vh;overflow-y:auto;position:relative;box-shadow:var(--shadow-lg)}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted)}
+
+/* ── CHECKLIST ── */
+.checklist-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;margin-bottom:6px;background:var(--white);border:1px solid var(--border);transition:background .2s}
+.checklist-item.done{background:var(--green-light);text-decoration:line-through;color:var(--muted)}
+.checklist-item input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer}
+
+/* ── OCCUPATION EXPLORER ── */
+.occ-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:14px 0}
+.occ-tag{padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:10px;font-size:.8rem;font-weight:600;text-align:center;cursor:pointer;transition:all .2s}
+.occ-tag:hover,.occ-tag.active{background:var(--blue-light);border-color:var(--blue);color:var(--blue)}
+
+/* ── TIMELINE ── */
+.timeline{position:relative;padding-left:32px}
+.timeline::before{content:'';position:absolute;left:12px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--blue),var(--purple))}
+.tl-item{position:relative;margin-bottom:24px}
+.tl-dot{position:absolute;left:-24px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--blue);border:3px solid var(--white);box-shadow:0 0 0 2px var(--blue)}
+.tl-item h4{font-weight:700;color:var(--dark);margin-bottom:4px}
+.tl-item p{font-size:.88rem;color:var(--mid)}
+
+/* ── PROGRESS TRACKER (floating) ── */
+#progress-tracker{position:fixed;bottom:20px;right:20px;background:var(--white);border-radius:14px;box-shadow:var(--shadow-lg);padding:14px 18px;z-index:500;min-width:180px;border:2px solid var(--blue-light)}
+#progress-tracker h5{font-size:.78rem;color:var(--muted);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
+#pt-label{font-size:.82rem;font-weight:600;color:var(--dark);margin-bottom:4px}
+#progress-tracker .progress-bar{margin:4px 0}
+#progress-tracker .close-pt{position:absolute;top:6px;right:8px;background:none;border:none;font-size:1rem;cursor:pointer;color:var(--muted)}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:24px;background:var(--dark);color:rgba(255,255,255,.7);font-size:.82rem;margin-top:40px}
+footer span{color:#f5c842;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="topbar-inner">
+    <div class="site-title">Career Clusters Lab <span>Interactive Teaching & Learning</span></div>
+    <ul class="nav-tabs" id="main-nav">
+      <li><a href="#" onclick="showSection('s1',this)" class="active">🏠 Start Here</a></li>
+      <li><a href="#" onclick="showSection('s2',this)">📋 Unit Overview</a></li>
+      <li><a href="#" onclick="showSection('s3',this)">🎓 Teacher BG</a></li>
+      <li><a href="#" onclick="showSection('s4',this)">📚 Lessons</a></li>
+      <li><a href="#" onclick="showSection('s5',this)">🧩 Activities</a></li>
+      <li><a href="#" onclick="showSection('s6',this)">📄 Worksheets</a></li>
+      <li><a href="#" onclick="showSection('s7',this)">✍️ Read/Write</a></li>
+      <li><a href="#" onclick="showSection('s8',this)">🎯 Engagement</a></li>
+      <li><a href="#" onclick="showSection('s9',this)">🌱 Differentiation</a></li>
+      <li><a href="#" onclick="showSection('s10',this)">📊 Assessment</a></li>
+      <li><a href="#" onclick="showSection('s11',this)">🏆 Final Project</a></li>
+      <li><a href="#" onclick="showSection('s12',this)">🖨️ Print Center</a></li>
+    </ul>
+    <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+      <div class="view-toggle">
+        <button class="view-btn active" onclick="setView('both',this)" id="vb-both">👁️ All</button>
+        <button class="view-btn" onclick="setView('teacher',this)" id="vb-teacher">🎓 Teacher</button>
+        <button class="view-btn" onclick="setView('student',this)" id="vb-student">🎒 Student</button>
+      </div>
+      <input id="search-bar" style="display:block" placeholder="🔍 Search topics..." oninput="searchContent(this.value)">
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS TRACKER -->
+<div id="progress-tracker">
+  <button class="close-pt" onclick="document.getElementById('progress-tracker').style.display='none'">×</button>
+  <h5>📈 Your Progress</h5>
+  <div id="pt-label">0 of 12 sections</div>
+  <div class="progress-bar"><div class="progress-fill" id="pt-fill" style="width:0%"></div></div>
+  <div id="pt-badges"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 1 — START HERE
+════════════════════════════════════════════════════════ -->
+<div class="section active" id="s1">
+  <div class="hero">
+    <h1>Career Clusters <span>Interactive</span> Teaching & Learning Lab</h1>
+    <p>A complete, classroom-ready digital unit for high school students and educators. Explore, discover, and plan your future.</p>
+    <div class="hero-btns">
+      <button class="btn btn-lg" style="background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);color:#fff" onclick="setView('teacher',document.getElementById('vb-teacher'))">🎓 Teacher View</button>
+      <button class="btn btn-lg" style="background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);color:#fff" onclick="setView('student',document.getElementById('vb-student'))">🎒 Student View</button>
+      <button class="btn btn-lg" style="background:#f5c842;color:#1a1a2e;font-weight:800" onclick="showSection('s2',document.querySelectorAll('.nav-tabs a')[1])">▶ Start the Unit</button>
+      <button class="btn btn-lg" style="background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.3);color:#fff" onclick="showSection('s5',document.querySelectorAll('.nav-tabs a')[4])">🔍 Quick Explore Clusters</button>
+    </div>
+    <div class="hero-credit">Curriculum Developed & Designed by <strong>Hilary Homaii</strong></div>
+  </div>
+
+  <!-- Interactive Poll -->
+  <div class="card card-blue mb-24">
+    <h3 style="margin-bottom:6px">🤔 Quick Question: What shapes career choices most?</h3>
+    <p class="text-muted mb-8">Click all that apply to you. There's no wrong answer!</p>
+    <div class="poll-options" id="poll-opts">
+      <div class="poll-opt" onclick="pollSelect(this,'interests')">💚 Interests</div>
+      <div class="poll-opt" onclick="pollSelect(this,'strengths')">💪 Strengths</div>
+      <div class="poll-opt" onclick="pollSelect(this,'values')">❤️ Values</div>
+      <div class="poll-opt" onclick="pollSelect(this,'personality')">🧠 Personality</div>
+      <div class="poll-opt" onclick="pollSelect(this,'opportunities')">🚪 Opportunities</div>
+      <div class="poll-opt" onclick="pollSelect(this,'goals')">🎯 Goals</div>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="showPollResults()">See Class Results →</button>
+    <div id="poll-results" style="display:none;margin-top:14px"></div>
+  </div>
+
+  <!-- Welcome cards -->
+  <div class="grid-2">
+    <div class="card card-blue teacher-only">
+      <div class="badge badge-blue mb-8">🎓 For Teachers</div>
+      <h3 style="margin-bottom:8px">Welcome, Educator!</h3>
+      <p class="mb-8">This lab is your complete instructional package for teaching Career Clusters. It includes lesson plans, teacher scripts, student activities, rubrics, and everything you need to run a powerful, differentiated unit—even if you're new to career education.</p>
+      <ul class="styled">
+        <li>Navigate by section using the top tabs</li>
+        <li>Toggle Teacher/Student view as needed</li>
+        <li>Print any section using the Print Center</li>
+        <li>Track student progress with built-in tools</li>
+      </ul>
+      <div class="callout tip" style="margin-top:12px">Start with <strong>Teacher Background Knowledge</strong> to build your own confidence before teaching this unit.</div>
+    </div>
+    <div class="card card-green student-only">
+      <div class="badge badge-green mb-8">🎒 For Students</div>
+      <h3 style="margin-bottom:8px">Welcome, Future Professional!</h3>
+      <p class="mb-8">This lab will help you discover where your interests, strengths, and values connect to real careers. You'll explore 16+ career clusters, analyze pathways, and build a plan for your future.</p>
+      <ul class="styled">
+        <li>Complete activities, games, and writing tasks</li>
+        <li>Flip flashcards to learn key vocabulary</li>
+        <li>Explore careers across many industries</li>
+        <li>Build your final career project step by step</li>
+      </ul>
+      <div class="callout challenge" style="margin-top:12px">Your challenge: find at least <strong>3 career clusters</strong> that genuinely interest you by the end of this unit.</div>
+    </div>
+  </div>
+
+  <!-- Why it matters -->
+  <div class="card" style="margin-top:16px">
+    <h3 style="margin-bottom:14px">⭐ Why Career Clusters Matter</h3>
+    <div class="grid-3">
+      <div style="text-align:center;padding:16px;background:var(--blue-light);border-radius:12px">
+        <div style="font-size:2rem">🗺️</div>
+        <h4 style="margin:8px 0 4px">Direction</h4>
+        <p class="text-small text-muted">Career clusters organize thousands of jobs into meaningful groups, giving your plans direction and focus.</p>
+      </div>
+      <div style="text-align:center;padding:16px;background:var(--green-light);border-radius:12px">
+        <div style="font-size:2rem">🔗</div>
+        <h4 style="margin:8px 0 4px">Connection</h4>
+        <p class="text-small text-muted">See how your school subjects, hobbies, and strengths connect to real jobs and industries.</p>
+      </div>
+      <div style="text-align:center;padding:16px;background:var(--purple-light);border-radius:12px">
+        <div style="font-size:2rem">🚀</div>
+        <h4 style="margin:8px 0 4px">Opportunity</h4>
+        <p class="text-small text-muted">Discover careers you've never heard of and pathways that match who you really are.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Cluster Preview -->
+  <div class="card" style="margin-top:16px">
+    <h3 style="margin-bottom:14px">🌐 The 16 Career Clusters at a Glance</h3>
+    <div id="cluster-quick-grid" class="grid-4"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 2 — UNIT OVERVIEW
+════════════════════════════════════════════════════════ -->
+<div class="section" id="s2">
+  <div class="sec-header">
+    <h2>📋 Unit Overview</h2>
+    <p>Everything teachers and students need to understand the scope, goals, and structure of this unit.</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-blue">
+      <h4 class="mb-8">📌 Unit Snapshot</h4>
+      <table>
+        <tr><td><strong>Unit Title</strong></td><td>Career Clusters: Exploring Pathways to Your Future</td></tr>
+        <tr><td><strong>Grade Levels</strong></td><td>9–12 (adaptable for 8th)</td></tr>
+        <tr><td><strong>Duration</strong></td><td>3–4 weeks (15–20 class periods)</td></tr>
+        <tr><td><strong>Subject Areas</strong></td><td>Career & Technical Ed, Advisory, ELA, Social Studies</td></tr>
+        <tr><td><strong>Format</strong></td><td>Individual, partner, small group, whole class</td></tr>
+      </table>
+    </div>
+    <div class="card card-yellow">
+      <h4 class="mb-8">💡 Big Idea</h4>
+      <p style="font-size:1.05rem;font-style:italic;color:var(--dark);margin-bottom:12px">"Career readiness begins with self-knowledge and expands through exploration of how the working world is organized."</p>
+      <p class="text-small text-muted">Students who understand how careers cluster together make more intentional choices about their coursework, activities, and long-term goals.</p>
+    </div>
+  </div>
+
+  <!-- Essential Questions -->
+  <div class="card card-purple mt-16">
+    <h4 class="mb-8">❓ Essential Questions</h4>
+    <div class="grid-2">
+      <div>
+        <ol class="styled">
+          <li>What are career clusters and why are they a useful way to organize careers?</li>
+          <li>How do my personal interests, strengths, values, and personality connect to possible career pathways?</li>
+          <li>How do education and training requirements differ across career clusters?</li>
+        </ol>
+      </div>
+      <div>
+        <ol class="styled" start="4">
+          <li>What does it mean to have a "career pathway" rather than just a "job"?</li>
+          <li>How do changes in society, technology, and the economy affect career clusters?</li>
+          <li>What can I do now—in high school—to move toward a career cluster that interests me?</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enduring Understandings -->
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">📖 Enduring Understandings <span class="acc-icon">▾</span></div>
+    <div class="acc-body">
+      <ul class="styled">
+        <li>Career clusters are organized systems that group related occupations, industries, and pathways to help students and workers navigate career decisions.</li>
+        <li>Self-knowledge—understanding one's own interests, strengths, values, and personality—is the foundation of strong career planning.</li>
+        <li>Career pathways connect a series of courses, experiences, and credentials that lead to a cluster of related occupations.</li>
+        <li>There is no single "right" career—students should explore broadly before narrowing their focus.</li>
+        <li>Career choices are influenced by internal factors (interests, values) and external factors (opportunities, economy, family).</li>
+        <li>Education does not end at high school—most careers require ongoing learning and adaptation.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Learning Objectives -->
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🎯 Learning Objectives <span class="acc-icon">▾</span></div>
+    <div class="acc-body">
+      <div class="tab-group">
+        <div class="tab-btns">
+          <button class="tab-btn active" onclick="switchTab(this,'obj-student')">Student-Facing</button>
+          <button class="tab-btn" onclick="switchTab(this,'obj-teacher')">Teacher-Facing</button>
+        </div>
+        <div class="tab-panel active" id="obj-student">
+          <p class="callout why-matters" style="margin-bottom:14px">By the end of this unit, you will be able to…</p>
+          <ol class="styled">
+            <li>Define <em>career cluster</em>, <em>career pathway</em>, and <em>occupation</em> and explain how they connect.</li>
+            <li>Identify at least 10 of the 16 national career clusters and give examples of jobs in each.</li>
+            <li>Analyze your own interests, strengths, values, and personality traits using structured reflection tools.</li>
+            <li>Match occupations to their appropriate cluster using evidence-based reasoning.</li>
+            <li>Compare at least two career pathways and explain the similarities and differences.</li>
+            <li>Write a thoughtful reflection connecting your personal profile to one or more career clusters.</li>
+            <li>Research a career of interest and present findings to an audience.</li>
+            <li>Create a personal career exploration plan with short- and long-term goals.</li>
+          </ol>
+        </div>
+        <div class="tab-panel" id="obj-teacher">
+          <p class="callout tip" style="margin-bottom:14px">Teacher-facing objectives aligned to broader standards frameworks.</p>
+          <ol class="styled">
+            <li>Students will identify and describe all 16 national career clusters and their associated pathways and occupations. <span class="tag">Knowledge</span></li>
+            <li>Students will conduct structured self-assessments using interest inventories and value-ranking activities. <span class="tag">Application</span></li>
+            <li>Students will read and analyze career profiles using close reading strategies. <span class="tag">Literacy</span></li>
+            <li>Students will compare and contrast career pathways using graphic organizers and structured writing. <span class="tag">Analysis</span></li>
+            <li>Students will produce a culminating career exploration project demonstrating synthesis of unit learning. <span class="tag">Synthesis</span></li>
+            <li>Students will present and defend their career exploration findings using academic language. <span class="tag">Communication</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vocabulary -->
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">📝 Unit Vocabulary List <span class="acc-icon">▾</span></div>
+    <div class="acc-body">
+      <div class="grid-2">
+        <div>
+          <h5 class="mb-8">Tier 1 — Core Terms</h5>
+          <table>
+            <tr><th>Term</th><th>Definition</th></tr>
+            <tr><td><strong>Career Cluster</strong></td><td>A broad grouping of related careers sharing common knowledge and skills</td></tr>
+            <tr><td><strong>Career Pathway</strong></td><td>A sequence of courses and experiences leading to careers in a cluster</td></tr>
+            <tr><td><strong>Occupation</strong></td><td>A specific type of job or work performed by a person</td></tr>
+            <tr><td><strong>Industry</strong></td><td>A category of economic activity or business sector</td></tr>
+            <tr><td><strong>Credential</strong></td><td>A certificate, license, or degree verifying skills or education</td></tr>
+            <tr><td><strong>Interest Inventory</strong></td><td>A tool that identifies personal interests to connect to careers</td></tr>
+            <tr><td><strong>Values</strong></td><td>Beliefs and principles that guide decisions and priorities</td></tr>
+            <tr><td><strong>Aptitude</strong></td><td>A natural ability or talent in a given area</td></tr>
+          </table>
+        </div>
+        <div>
+          <h5 class="mb-8">Tier 2 — Advanced Terms</h5>
+          <table>
+            <tr><th>Term</th><th>Definition</th></tr>
+            <tr><td><strong>Labor Market</strong></td><td>The supply and demand for workers in the economy</td></tr>
+            <tr><td><strong>Transferable Skills</strong></td><td>Skills usable across multiple jobs and industries</td></tr>
+            <tr><td><strong>Licensure</strong></td><td>Official permission to practice a profession</td></tr>
+            <tr><td><strong>Post-secondary</strong></td><td>Education or training after high school</td></tr>
+            <tr><td><strong>Specialization</strong></td><td>Focusing on a specific area of a broader field</td></tr>
+            <tr><td><strong>Portfolio</strong></td><td>A collection of work demonstrating skills and growth</td></tr>
+            <tr><td><strong>Entrepreneurship</strong></td><td>Starting and running one's own business</td></tr>
+            <tr><td><strong>Work-Based Learning</strong></td><td>Hands-on career experiences tied to school curriculum</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Common Misconceptions -->
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">⚠️ Common Misconceptions to Address <span class="acc-icon">▾</span></div>
+    <div class="acc-body">
+      <div class="grid-2">
+        <div class="callout warning" style="background:#fdecea;border-color:#e74c3c">
+          <strong>❌ Myth:</strong> "You have to know exactly what you want to be when you grow up."<br>
+          <strong style="color:var(--green)">✅ Truth:</strong> Career exploration is a process. Most adults change career directions multiple times.
+        </div>
+        <div class="callout warning" style="background:#fdecea;border-color:#e74c3c">
+          <strong>❌ Myth:</strong> "Career clusters are only for students who aren't going to college."<br>
+          <strong style="color:var(--green)">✅ Truth:</strong> All 16 clusters include college-level careers. Clusters help ALL students plan.
+        </div>
+        <div class="callout warning" style="background:#fdecea;border-color:#e74c3c">
+          <strong>❌ Myth:</strong> "Your career is fixed once you choose a pathway."<br>
+          <strong style="color:var(--green)">✅ Truth:</strong> Pathways are flexible. Skills in one cluster often transfer to others.
+        </div>
+        <div class="callout warning" style="background:#fdecea;border-color:#e74c3c">
+          <strong>❌ Myth:</strong> "High-paying careers are always the best ones."<br>
+          <strong style="color:var(--green)">✅ Truth:</strong> Career satisfaction depends on personal values, not just salary.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Materials -->
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🛠️ Materials & Resources Needed <span class="acc-icon">▾</span></div>
+    <div class="acc-body">
+      <div class="two-col">
+        <ul class="styled">
+          <li>This interactive website (one device per student ideally)</li>
+          <li>Printed worksheets from the Print Center (optional)</li>
+          <li>Internet access for career research</li>
+          <li>Journals or composition notebooks for reflections</li>
+          <li>Markers, index cards for hands-on activities</li>
+          <li>Chart paper or whiteboard space for gallery walks</li>
+          <li>Presentation tools (Google Slides, Canva, or poster boards)</li>
+          <li>Access to O*NET OnLine, BLS Occupational Outlook, or CareerOneStop</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 3 — TEACHER BACKGROUND
+════════════════════════════════════════════════════════ -->
+<div class="section" id="s3">
+  <div class="sec-header">
+    <h2>🎓 Teacher Background Knowledge</h2>
+    <p>Deep background to help you teach this unit confidently, even if career clusters are new to you.</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="callout tip">Read through this section before teaching. Use the "Say It Simply" and "Teacher Script" pop-outs to prepare your language for students.</div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">📘 What Are Career Clusters? <span class="acc-icon">▾</span></div>
+    <div class="acc-body">
+      <p class="mb-8">Career clusters are broad groupings of occupations and industries organized by their common knowledge base, skills, and characteristics. The United States uses a framework of <strong>16 national career clusters</strong>, developed through a federal initiative to help states align education to workforce needs.</p>
+      <p class="mb-8">Each cluster contains multiple <strong>career pathways</strong>—more specific sequences of coursework and experiences that prepare students for related occupations. Within each pathway are specific <strong>occupations</strong>—the actual job titles people hold.</p>
+      <div style="background:var(--blue-light);border-radius:12px;padding:16px;margin:14px 0">
+        <strong>The Hierarchy:</strong>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px">
+          <span class="badge badge-blue" style="font-size:.85rem;padding:6px 14px">Career Cluster</span>
+          <span>→</span>
+          <span class="badge badge-green" style="font-size:.85rem;padding:6px 14px">Career Pathway</span>
+          <span>→</span>
+          <span class="badge badge-orange" style="font-size:.85rem;padding:6px 14px">Occupation</span>
+        </div>
+        <p class="text-small text-muted mt-8">Example: <strong>Health Science</strong> (Cluster) → <strong>Therapeutic Services</strong> (Pathway) → <strong>Registered Nurse</strong> (Occupation)</p>
+      </div>
+      <div class="callout tip">Say it simply to students: "Think of a career cluster like a neighborhood. The pathway is the street. Your occupation is the house you live in."</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🔍 Why Career Clusters Were Created <span class="acc-icon">▾</span></div>
+    <div class="acc-body">
+      <p class="mb-8">Before career clusters were formalized, students often chose courses without understanding how they connected to careers. The 16-cluster framework was created by the National Association of State Directors of Career Technical Education Consortium (NASDCTEc) to:</p>
+      <ul class="styled mb-8">
+        <li>Organize the complex labor market into manageable, meaningful categories</li>
+        <li>Help students connect their school coursework to real career outcomes</li>
+        <li>Guide curriculum design in Career and Technical Education (CTE)</li>
+        <li>Give counselors and teachers a shared language for career advising</li>
+        <li>Support workforce development aligned to regional and national economic needs</li>
+      </ul>
+      <div class="callout real-world">The U.S. Bureau of Labor Statistics projects that most new jobs created through 2032 will fall within the Health Science, IT, and Education clusters—making career cluster awareness especially important today.</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🆚 Clusters vs. Jobs vs. Industries <span class="acc-icon">▾</span></div>
+    <div class="acc-body">
+      <table>
+        <tr><th>Concept</th><th>What It Is</th><th>Example</th></tr>
+        <tr><td><strong>Career Cluster</strong></td><td>Broad grouping of related careers</td><td>Health Science</td></tr>
+        <tr><td><strong>Career Pathway</strong></td><td>Specific route within a cluster</td><td>Diagnostic Services</td></tr>
+        <tr><td><strong>Occupation</strong></td><td>Specific job title</td><td>Radiologic Technologist</td></tr>
+        <tr><td><strong>Industry</strong></td><td>Economic sector businesses operate in</td><td>Healthcare & Social Assistance</td></tr>
+        <tr><td><strong>Career Field</strong></td><td>Informal term often used interchangeably with cluster</td><td>Medical / Health careers</td></tr>
+      </table>
+      <div class="callout warning">Students sometimes confuse "industry" (the business sector) with "career cluster" (the educational framework). Clarify that these overlap but are not identical systems.</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🧠 How Career Clusters Support Self-Awareness <span class="acc-icon">▾</span></div>
+    <div class="acc-body">
+      <p class="mb-8">Career cluster education is most powerful when connected to self-awareness. Research in career development (Holland, Super, Savickas) consistently shows that students who understand their own:</p>
+      <div class="grid-2">
+        <div>
+          <ul class="styled">
+            <li><strong>Interests</strong> — What activities and subjects engage and energize them</li>
+            <li><strong>Strengths</strong> — What they do well, naturally and through effort</li>
+            <li><strong>Values</strong> — What matters most to them in work and life</li>
+            <li><strong>Personality</strong> — How they prefer to interact, solve problems, and work</li>
+          </ul>
+        </div>
+        <div>
+          <p>…make more purposeful course selections, show greater academic engagement, and have lower dropout rates.</p>
+          <div class="callout tip">Use the Interest Inventory in Section 5 before introducing the clusters. Students will be more invested when they see their own profile first.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">📋 The 16 Clusters — Deep Reference Guide <span class="acc-icon">▾</span></div>
+    <div class="acc-body">
+      <div id="cluster-reference-grid"></div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🗣️ Teacher Script — Introducing Career Clusters (Day 1) <span class="acc-icon">▾</span></div>
+    <div class="acc-body">
+      <div style="background:#1a1a2e;color:#f0f0f0;border-radius:12px;padding:20px;font-family:monospace;font-size:.88rem;line-height:1.7">
+        <span style="color:#f5c842">[SCRIPT — read aloud or paraphrase]</span><br><br>
+        "Good morning, everyone. Today we're starting a unit that I think you're actually going to find interesting—because it's about you.<br><br>
+        Let me ask you a question. If someone asked you right now, 'What do you want to be when you grow up?'—how many of you would feel confident answering that? [Pause for hands.] How many of you feel completely lost? [Pause.] How many are somewhere in between?<br><br>
+        Here's the thing: <strong>you don't have to have it figured out right now.</strong> But you DO have to start exploring. And that's exactly what this unit is about.<br><br>
+        The working world has thousands of different jobs. But they can be organized into 16 major groups called <em>career clusters</em>. Think of clusters like different neighborhoods in a city. Each neighborhood has its own vibe, its own kind of work, its own schools and training. Our job this unit is to walk through those neighborhoods and figure out which ones feel like <em>home</em> to you."<br><br>
+        <span style="color:#f5c842">[Transition to cluster overview visual]</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 4 — LESSON PLANS
+════════════════════════════════════════════════════════ -->
+<div class="section" id="s4">
+  <div class="sec-header">
+    <h2>📚 Lesson Plans</h2>
+    <p>Eight complete, detailed lessons with everything you need to teach this unit from start to finish.</p>
+    <div class="divider"></div>
+  </div>
+  <div id="lessons-container"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 5 — STUDENT ACTIVITIES
+════════════════════════════════════════════════════════ -->
+<div class="section" id="s5">
+  <div class="sec-header">
+    <h2>🧩 Student Activities</h2>
+    <p>Interactive, hands-on learning experiences for individuals, partners, and groups.</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="tab-group">
+    <div class="tab-btns">
+      <button class="tab-btn active" onclick="switchTab(this,'act-explore')">🔍 Explore Clusters</button>
+      <button class="tab-btn" onclick="switchTab(this,'act-sort')">🎯 Sorting Game</button>
+      <button class="tab-btn" onclick="switchTab(this,'act-interest')">💚 Interest Inventory</button>
+      <button class="tab-btn" onclick="switchTab(this,'act-flashcards')">🃏 Vocabulary Flashcards</button>
+      <button class="tab-btn" onclick="switchTab(this,'act-scenarios')">🎭 Scenarios</button>
+      <button class="tab-btn" onclick="switchTab(this,'act-research')">🔬 Career Research</button>
+    </div>
+
+    <!-- EXPLORE CLUSTERS -->
+    <div class="tab-panel active" id="act-explore">
+      <div class="callout challenge">Click on any career cluster card below to explore its pathways and sample occupations!</div>
+      <div id="explore-grid" class="grid-4" style="margin-top:14px"></div>
+      <div id="cluster-detail-panel" style="display:none" class="card card-blue mt-16">
+        <div id="cluster-detail-content"></div>
+        <button class="btn btn-outline btn-sm mt-8" onclick="document.getElementById('cluster-detail-panel').style.display='none'">✕ Close</button>
+      </div>
+    </div>
+
+    <!-- SORTING GAME -->
+    <div class="tab-panel" id="act-sort">
+      <h3 class="mb-8">🎯 Career Sorting Challenge</h3>
+      <p class="text-muted mb-16">Drag each occupation card into the correct career cluster box. Sort as many as you can!</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px" id="sort-cards-pool"></div>
+      <div id="sort-targets" class="grid-2"></div>
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="checkSortAnswers()">✅ Check Answers</button>
+        <button class="btn btn-outline btn-sm" onclick="resetSort()">🔄 Reset</button>
+      </div>
+      <div id="sort-result" style="margin-top:12px"></div>
+    </div>
+
+    <!-- INTEREST INVENTORY -->
+    <div class="tab-panel" id="act-interest">
+      <h3 class="mb-8">💚 Interest & Strengths Inventory</h3>
+      <p class="text-muted mb-16">Rate each statement from 1 (not at all like me) to 5 (very much like me). Your results will suggest career cluster directions!</p>
+      <div id="interest-inventory"></div>
+      <button class="btn btn-green mt-16" onclick="calcInterest()">📊 See My Results →</button>
+      <div id="interest-results" style="display:none;margin-top:20px"></div>
+    </div>
+
+    <!-- FLASHCARDS -->
+    <div class="tab-panel" id="act-flashcards">
+      <h3 class="mb-8">🃏 Vocabulary Flashcards</h3>
+      <p class="text-muted mb-16">Click any card to reveal its definition. Study all 20 key terms!</p>
+      <div class="flashcard-grid" id="flashcard-grid"></div>
+      <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm" onclick="flipAllCards()">🔄 Flip All</button>
+        <button class="btn btn-outline btn-sm" onclick="shuffleFlashcards()">🔀 Shuffle</button>
+      </div>
+    </div>
+
+    <!-- SCENARIOS -->
+    <div class="tab-panel" id="act-scenarios">
+      <h3 class="mb-8">🎭 Career Scenario Challenges</h3>
+      <p class="text-muted mb-16">Read each scenario and decide: Which career cluster best fits this person? Explain your reasoning.</p>
+      <div id="scenario-cards"></div>
+    </div>
+
+    <!-- RESEARCH -->
+    <div class="tab-panel" id="act-research">
+      <h3 class="mb-8">🔬 Mini Career Research Task</h3>
+      <p class="text-muted mb-16">Choose a career that interests you and use the organizer below to research it. Use O*NET, BLS, or CareerOneStop.</p>
+      <div class="card">
+        <h4 class="mb-8">Career Research Organizer</h4>
+        <div class="grid-2">
+          <div>
+            <label style="font-weight:600;font-size:.88rem">Career / Occupation Title:</label>
+            <input type="text" class="writing-box" style="height:40px;min-height:40px;margin:6px 0 14px;padding:8px 12px" placeholder="e.g., Biomedical Engineer">
+            <label style="font-weight:600;font-size:.88rem">Career Cluster:</label>
+            <input type="text" class="writing-box" style="height:40px;min-height:40px;margin:6px 0 14px;padding:8px 12px" placeholder="e.g., Science, Technology, Engineering & Math">
+            <label style="font-weight:600;font-size:.88rem">What does this person do daily?</label>
+            <textarea class="writing-box" style="height:80px;margin:6px 0 14px" placeholder="Describe 3–4 daily tasks..."></textarea>
+            <label style="font-weight:600;font-size:.88rem">Required Education / Training:</label>
+            <textarea class="writing-box" style="height:60px;margin:6px 0 14px" placeholder="Degree, certificate, apprenticeship..."></textarea>
+          </div>
+          <div>
+            <label style="font-weight:600;font-size:.88rem">Median Annual Salary (U.S.):</label>
+            <input type="text" class="writing-box" style="height:40px;min-height:40px;margin:6px 0 14px;padding:8px 12px" placeholder="$__,___">
+            <label style="font-weight:600;font-size:.88rem">Top Skills Required:</label>
+            <textarea class="writing-box" style="height:70px;margin:6px 0 14px" placeholder="List 4–5 key skills..."></textarea>
+            <label style="font-weight:600;font-size:.88rem">Why does this career interest you?</label>
+            <textarea class="writing-box" style="height:80px;margin:6px 0 14px" placeholder="Connect to your personal interests or strengths..."></textarea>
+            <label style="font-weight:600;font-size:.88rem">Job Outlook (growing/declining?):</label>
+            <textarea class="writing-box" style="height:60px;margin:6px 0" placeholder="Use BLS Occupational Outlook data..."></textarea>
+          </div>
+        </div>
+        <div class="callout real-world" style="margin-top:12px">Research resources: <strong>O*NET OnLine</strong> (onetonline.org) • <strong>BLS Occupational Outlook</strong> (bls.gov/ooh) • <strong>CareerOneStop</strong> (careeronestop.org)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 6 — WORKSHEETS
+════════════════════════════════════════════════════════ -->
+<div class="section" id="s6">
+  <div class="sec-header">
+    <h2>📄 Worksheets</h2>
+    <p>Classroom-ready, printable student worksheets for every stage of the unit.</p>
+    <div class="divider"></div>
+  </div>
+  <div class="callout tip no-print">Switch to <strong>Student View</strong> before printing to hide teacher notes.</div>
+
+  <div class="tab-group">
+    <div class="tab-btns">
+      <button class="tab-btn active" onclick="switchTab(this,'ws1')">1. Intro</button>
+      <button class="tab-btn" onclick="switchTab(this,'ws2')">2. Vocab</button>
+      <button class="tab-btn" onclick="switchTab(this,'ws3')">3. Interests</button>
+      <button class="tab-btn" onclick="switchTab(this,'ws4')">4. Cluster ID</button>
+      <button class="tab-btn" onclick="switchTab(this,'ws5')">5. Occ. Sort</button>
+      <button class="tab-btn" onclick="switchTab(this,'ws6')">6. Reading</button>
+      <button class="tab-btn" onclick="switchTab(this,'ws7')">7. Compare</button>
+      <button class="tab-btn" onclick="switchTab(this,'ws8')">8. Reflection</button>
+      <button class="tab-btn" onclick="switchTab(this,'ws9')">9. Research</button>
+      <button class="tab-btn" onclick="switchTab(this,'ws10')">10. Project Plan</button>
+    </div>
+
+    <div class="tab-panel active" id="ws1">
+      <div class="card" style="border-top:4px solid var(--blue)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+          <div><h3>Worksheet 1: Introduction to Career Clusters</h3><p class="text-muted text-small">Name: _________________________ Date: _____________ Period: _____</p></div>
+          <span class="badge badge-blue">Introductory</span>
+        </div>
+        <p class="mb-16"><strong>Directions:</strong> Complete each section thoughtfully. There are no wrong answers for reflection sections.</p>
+        <h4 class="mb-8">Part A: Prior Knowledge</h4>
+        <p class="text-small mb-8">1. What do you think a "career cluster" is? Write your best guess:</p>
+        <div style="border:1.5px solid #ccc;border-radius:8px;min-height:60px;padding:10px;margin-bottom:14px;background:#fafafa"></div>
+        <p class="text-small mb-8">2. List 5 careers you can think of right now:</p>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px">
+          <div style="border-bottom:1.5px solid #ccc;padding:4px">1.</div>
+          <div style="border-bottom:1.5px solid #ccc;padding:4px">2.</div>
+          <div style="border-bottom:1.5px solid #ccc;padding:4px">3.</div>
+          <div style="border-bottom:1.5px solid #ccc;padding:4px">4.</div>
+          <div style="border-bottom:1.5px solid #ccc;padding:4px">5.</div>
+        </div>
+        <h4 class="mb-8">Part B: Grouping</h4>
+        <p class="text-small mb-8">3. Group your careers above into 2–3 categories. Give each group a name:</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">
+          <div style="border:1.5px solid #ccc;border-radius:8px;padding:10px;min-height:80px"><strong>Group 1:</strong></div>
+          <div style="border:1.5px solid #ccc;border-radius:8px;padding:10px;min-height:80px"><strong>Group 2:</strong></div>
+          <div style="border:1.5px solid #ccc;border-radius:8px;padding:10px;min-height:80px"><strong>Group 3:</strong></div>
+        </div>
+        <h4 class="mb-8">Part C: Reflection</h4>
+        <p class="text-small mb-8">4. What career have you thought about for yourself? Why does it appeal to you?</p>
+        <div style="border:1.5px solid #ccc;border-radius:8px;min-height:70px;padding:10px;margin-bottom:14px;background:#fafafa"></div>
+        <p class="text-small mb-8">5. What do you hope to learn about careers in this unit?</p>
+        <div style="border:1.5px solid #ccc;border-radius:8px;min-height:50px;padding:10px;background:#fafafa"></div>
+        <div class="callout tip mt-16 teacher-only"><strong>Answer Key:</strong> Parts A & C are personal reflections — accept all reasonable responses. Part B shows categorization thinking. Debrief: "What made you group these together?" — previews cluster concept.</div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="ws2">
+      <div class="card" style="border-top:4px solid var(--purple)">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+          <div><h3>Worksheet 2: Career Clusters Vocabulary</h3><p class="text-muted text-small">Name: _________________________ Date: _____________ Period: _____</p></div>
+          <span class="badge badge-purple">Vocabulary</span>
+        </div>
+        <div style="background:var(--purple-light);border-radius:10px;padding:14px;margin-bottom:16px">
+          <strong>Word Bank:</strong> career cluster · career pathway · occupation · credential · aptitude · transferable skills · labor market · values · interest inventory · post-secondary
+        </div>
+        <h4 class="mb-8">Part A: Fill in the Blank</h4>
+        <ol class="styled mb-16">
+          <li>A(n) __________________ is a broad grouping of related careers sharing common knowledge and skills.</li>
+          <li>A registered nurse is an example of a(n) __________________ within the Health Science cluster.</li>
+          <li>A sequence of courses and experiences preparing students for related careers is called a(n) __________________.</li>
+          <li>Your natural talent or ability in a specific area is called a(n) __________________.</li>
+          <li>A certificate, license, or degree verifying your training is called a(n) __________________.</li>
+          <li>Skills usable in many different jobs and industries are called __________________.</li>
+          <li>Education after high school is called __________________ education.</li>
+          <li>A tool identifying what activities and subjects interest you is called a(n) __________________.</li>
+        </ol>
+        <h4 class="mb-8">Part B: Use It in a Sentence</h4>
+        <div style="margin-bottom:10px"><strong>values:</strong><div style="border-bottom:1.5px solid #ccc;padding:4px;min-height:24px"></div></div>
+        <div><strong>labor market:</strong><div style="border-bottom:1.5px solid #ccc;padding:4px;min-height:24px"></div></div>
+        <div class="callout tip teacher-only mt-16"><strong>Answer Key — Part A:</strong> 1.career cluster 2.occupation 3.career pathway 4.aptitude 5.credential 6.transferable skills 7.post-secondary 8.interest inventory</div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="ws3">
+      <div class="card" style="border-top:4px solid var(--green)">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+          <div><h3>Worksheet 3: Interest &amp; Strengths Inventory</h3><p class="text-muted text-small">Name: _________________________ Date: _____________ Period: _____</p></div>
+          <span class="badge badge-green">Self-Assessment</span>
+        </div>
+        <p class="mb-8"><strong>Directions:</strong> Rate each statement 1–5. This is not a test — there are no right or wrong answers.</p>
+        <div style="background:var(--green-light);border-radius:10px;padding:10px;margin-bottom:16px;font-size:.85rem">
+          <strong>Scale:</strong> 1=Not like me &nbsp;|&nbsp; 2=Rarely &nbsp;|&nbsp; 3=Sometimes &nbsp;|&nbsp; 4=Often &nbsp;|&nbsp; 5=Very much like me
+        </div>
+        <table>
+          <tr><th>#</th><th>Statement</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+          <tr><td>1</td><td>I enjoy helping people who are sick, injured, or struggling.</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+          <tr><td>2</td><td>I love working with technology, apps, or computers.</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+          <tr><td>3</td><td>I like explaining ideas or teaching things I know.</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+          <tr><td>4</td><td>Numbers, budgets, and financial planning interest me.</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+          <tr><td>5</td><td>I enjoy creative work — designing, drawing, writing, or performing.</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+          <tr><td>6</td><td>I care deeply about justice, laws, and keeping people safe.</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+          <tr><td>7</td><td>I'm fascinated by how things are built or engineered.</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+          <tr><td>8</td><td>I like working with plants, animals, food, or the environment.</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+          <tr><td>9</td><td>I enjoy planning events or managing hospitality experiences.</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+          <tr><td>10</td><td>I love solving scientific problems or conducting experiments.</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+          <tr><td>11</td><td>I'm interested in business, management, and leadership.</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+          <tr><td>12</td><td>I find marketing, advertising, or persuasion interesting.</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+        </table>
+        <h4 class="mt-16 mb-8">Reflection</h4>
+        <p class="text-small mb-8">Which 3 statements did you rate highest? What do they suggest about your interests?</p>
+        <div style="border:1.5px solid #ccc;border-radius:8px;min-height:70px;padding:10px;background:#fafafa"></div>
+        <div class="callout tip teacher-only mt-16">Items map to: 1=Health, 2=IT, 3=Education, 4=Finance, 5=Arts, 6=Law, 7=Architecture/Manufacturing, 8=Agriculture, 9=Hospitality, 10=STEM, 11=Business, 12=Marketing.</div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="ws4">
+      <div class="card" style="border-top:4px solid var(--orange)">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+          <div><h3>Worksheet 4: Career Cluster Identification</h3><p class="text-muted text-small">Name: _________________________ Date: _____________ Period: _____</p></div>
+          <span class="badge badge-orange">Identification</span>
+        </div>
+        <p class="mb-16"><strong>Directions:</strong> Write the career cluster for each occupation and explain your reasoning in 1–2 sentences.</p>
+        <table>
+          <tr><th>Occupation</th><th>Career Cluster</th><th>Reasoning</th></tr>
+          <tr><td>Software Developer</td><td style="border-bottom:1px solid #eee">&nbsp;</td><td style="border-bottom:1px solid #eee">&nbsp;</td></tr>
+          <tr><td>Registered Nurse</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+          <tr><td>High School Teacher</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+          <tr><td>Financial Advisor</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+          <tr><td>Graphic Designer</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+          <tr><td>Police Officer</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+          <tr><td>Civil Engineer</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+          <tr><td>Hotel Manager</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+          <tr><td>Crop Scientist</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+          <tr><td>Social Worker</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        </table>
+        <div class="callout tip teacher-only mt-16"><strong>Answer Key:</strong> Software Dev→IT | Nurse→Health | Teacher→Education | Advisor→Finance | Designer→Arts | Officer→Law | Engineer→Architecture/STEM | Manager→Hospitality | Scientist→Agriculture | Worker→Human Services</div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="ws5">
+      <div class="card" style="border-top:4px solid var(--teal)">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+          <div><h3>Worksheet 5: Occupation Sorting</h3><p class="text-muted text-small">Name: _________________________ Date: _____________ Period: _____</p></div>
+          <span class="badge" style="background:var(--teal-light);color:var(--teal)">Sorting</span>
+        </div>
+        <div style="background:var(--teal-light);border-radius:10px;padding:14px;margin-bottom:16px;font-size:.85rem">
+          <strong>Sort these occupations:</strong> Paramedic · UX Designer · Middle School Counselor · Accountant · Film Director · Firefighter · Structural Engineer · Landscape Architect · Chef · Data Scientist · Supply Chain Manager · Marketing Analyst · City Mayor · Aircraft Mechanic · Fashion Designer
+        </div>
+        <table>
+          <tr><th>Career Cluster</th><th>Occupations That Belong Here</th></tr>
+          <tr><td>Health Science</td><td style="min-height:40px">&nbsp;</td></tr>
+          <tr><td>Information Technology</td><td>&nbsp;</td></tr>
+          <tr><td>Education &amp; Training</td><td>&nbsp;</td></tr>
+          <tr><td>Arts, A/V &amp; Communications</td><td>&nbsp;</td></tr>
+          <tr><td>Law, Public Safety &amp; Security</td><td>&nbsp;</td></tr>
+          <tr><td>Architecture &amp; Construction</td><td>&nbsp;</td></tr>
+          <tr><td>Hospitality &amp; Tourism</td><td>&nbsp;</td></tr>
+          <tr><td>STEM</td><td>&nbsp;</td></tr>
+          <tr><td>Transportation, Distribution &amp; Logistics</td><td>&nbsp;</td></tr>
+          <tr><td>Marketing</td><td>&nbsp;</td></tr>
+          <tr><td>Government &amp; Public Administration</td><td>&nbsp;</td></tr>
+          <tr><td>Finance</td><td>&nbsp;</td></tr>
+          <tr><td>Agriculture, Food &amp; Natural Resources</td><td>&nbsp;</td></tr>
+          <tr><td>Manufacturing</td><td>&nbsp;</td></tr>
+        </table>
+        <div class="callout tip teacher-only mt-16"><strong>Sample:</strong> Paramedic→Health | UX Designer→IT | Counselor→Education | Accountant→Finance | Film Director→Arts | Firefighter→Law | Engineer→Architecture | Chef→Hospitality | Data Scientist→IT/STEM | Supply Chain→Transportation | Marketing Analyst→Marketing | Mayor→Government | Aircraft Mechanic→Transportation/Manufacturing | Fashion Designer→Arts</div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="ws6">
+      <div class="card" style="border-top:4px solid var(--purple)">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+          <div><h3>Worksheet 6: Reading Comprehension</h3><p class="text-muted text-small">Name: _________________________ Date: _____________ Period: _____</p></div>
+          <span class="badge badge-purple">Reading</span>
+        </div>
+        <div style="background:#f9f9ff;border:1.5px solid #ddd;border-radius:10px;padding:16px;margin-bottom:16px;font-size:.9rem;line-height:1.8">
+          <strong>Career Pathways: More Than Just a Job Title</strong><br><br>
+          When most people think about choosing a career, they imagine picking a single job title — nurse, teacher, or engineer. But career experts encourage a broader way of thinking: choosing a <em>career pathway</em>. A career pathway is a sequence of education, training, and work experiences within a career cluster that leads to a range of related occupations.<br><br>
+          Unlike a single job, a pathway offers flexibility. A student who follows the Health Science cluster's Therapeutic Services pathway might become a physical therapist, an occupational therapist, a nurse practitioner, or a physician — all from the same pathway. Career pathways are important because the job market changes constantly. Students who understand their pathway — not just one job — are better prepared to adapt, because they have built transferable knowledge applicable across many related occupations.<br><br>
+          Research shows that students who align their courses to a career pathway graduate at higher rates, earn more in early employment, and report higher job satisfaction than those who make random course selections. This is why understanding career clusters and pathways — even in high school — matters so much.
+        </div>
+        <ol class="styled">
+          <li>In your own words, what is a career pathway?<div style="border:1.5px solid #ccc;border-radius:6px;min-height:50px;padding:8px;margin:6px 0 14px;background:#fafafa"></div></li>
+          <li>Why is understanding a pathway better than focusing on just one job?<div style="border:1.5px solid #ccc;border-radius:6px;min-height:50px;padding:8px;margin:6px 0 14px;background:#fafafa"></div></li>
+          <li>What evidence does the author use to support the importance of pathways?<div style="border:1.5px solid #ccc;border-radius:6px;min-height:50px;padding:8px;margin:6px 0 14px;background:#fafafa"></div></li>
+          <li>What does "transferable knowledge" mean? Give an example.<div style="border:1.5px solid #ccc;border-radius:6px;min-height:50px;padding:8px;margin:6px 0;background:#fafafa"></div></li>
+        </ol>
+        <div class="callout tip teacher-only mt-16"><strong>Sample Answers:</strong> Q1: A connected series of courses/experiences leading to multiple related jobs. Q2: Job market changes; pathways allow adaptation. Q3: Higher graduation rates, earnings, job satisfaction statistics. Q4: Knowledge used in multiple jobs — e.g., communication skills work across healthcare, education, and business.</div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="ws7">
+      <div class="card" style="border-top:4px solid var(--yellow)">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+          <div><h3>Worksheet 7: Compare &amp; Contrast Two Pathways</h3><p class="text-muted text-small">Name: _________________________ Date: _____________ Period: _____</p></div>
+          <span class="badge badge-yellow">Analysis</span>
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap">
+          <div style="flex:1;min-width:200px"><label style="font-size:.85rem;font-weight:600">Pathway/Cluster 1:</label><div style="border-bottom:1.5px solid #ccc;padding:6px;min-height:28px"></div></div>
+          <div style="flex:1;min-width:200px"><label style="font-size:.85rem;font-weight:600">Pathway/Cluster 2:</label><div style="border-bottom:1.5px solid #ccc;padding:6px;min-height:28px"></div></div>
+        </div>
+        <div style="display:flex;gap:0;margin-bottom:14px;min-height:120px">
+          <div style="flex:1;border:2px solid var(--blue);border-radius:50% 0 0 50%;padding:12px 8px 12px 16px;background:var(--blue-light);font-size:.82rem">
+            <strong>Only in Pathway 1:</strong><br><div style="min-height:80px;margin-top:6px"></div></div>
+          <div style="flex:.7;border-top:2px solid #aaa;border-bottom:2px solid #aaa;padding:12px 8px;background:#f0f4ff;font-size:.82rem;text-align:center">
+            <strong>Both:</strong><br><div style="min-height:80px;margin-top:6px"></div></div>
+          <div style="flex:1;border:2px solid var(--green);border-radius:0 50% 50% 0;padding:12px 16px 12px 8px;background:var(--green-light);font-size:.82rem">
+            <strong>Only in Pathway 2:</strong><br><div style="min-height:80px;margin-top:6px"></div></div>
+        </div>
+        <h4 class="mb-8">Comparison Paragraph</h4>
+        <p class="text-small mb-8">Write 5–7 sentences comparing the two pathways using: <em>similarly, in contrast, however, both, while, on the other hand</em></p>
+        <div style="border:1.5px solid #ccc;border-radius:8px;min-height:100px;padding:10px;background:#fafafa"></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="ws8">
+      <div class="card" style="border-top:4px solid var(--green)">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+          <div><h3>Worksheet 8: Career Reflection</h3><p class="text-muted text-small">Name: _________________________ Date: _____________ Period: _____</p></div>
+          <span class="badge badge-green">Reflection</span>
+        </div>
+        <ol class="styled">
+          <li>Which career cluster(s) felt most interesting to you during this unit? Why?<div style="border:1.5px solid #ccc;border-radius:6px;min-height:60px;padding:8px;margin:6px 0 16px;background:#fafafa"></div></li>
+          <li>What surprised you most about careers during this unit?<div style="border:1.5px solid #ccc;border-radius:6px;min-height:60px;padding:8px;margin:6px 0 16px;background:#fafafa"></div></li>
+          <li>How do your interests, strengths, or values connect to your top cluster(s)?<div style="border:1.5px solid #ccc;border-radius:6px;min-height:70px;padding:8px;margin:6px 0 16px;background:#fafafa"></div></li>
+          <li>What is one career you discovered that you had never heard of before?<div style="border:1.5px solid #ccc;border-radius:6px;min-height:60px;padding:8px;margin:6px 0 16px;background:#fafafa"></div></li>
+          <li>What is one action step you could take in the next year to explore your career cluster further?<div style="border:1.5px solid #ccc;border-radius:6px;min-height:50px;padding:8px;background:#fafafa"></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="ws9">
+      <div class="card" style="border-top:4px solid var(--blue)">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+          <div><h3>Worksheet 9: Career Research Organizer</h3><p class="text-muted text-small">Name: _________________________ Date: _____________ Period: _____</p></div>
+          <span class="badge badge-blue">Research</span>
+        </div>
+        <p class="mb-16"><strong>Directions:</strong> Choose one occupation and research it using O*NET, BLS, or CareerOneStop.</p>
+        <div class="grid-2">
+          <div>
+            <p class="text-small mb-4"><strong>Occupation:</strong></p><div style="border-bottom:1.5px solid #ccc;padding:6px;margin-bottom:10px"></div>
+            <p class="text-small mb-4"><strong>Career Cluster:</strong></p><div style="border-bottom:1.5px solid #ccc;padding:6px;margin-bottom:10px"></div>
+            <p class="text-small mb-4"><strong>Career Pathway:</strong></p><div style="border-bottom:1.5px solid #ccc;padding:6px;margin-bottom:10px"></div>
+            <p class="text-small mb-4"><strong>Median Annual Salary:</strong></p><div style="border-bottom:1.5px solid #ccc;padding:6px;margin-bottom:10px"></div>
+            <p class="text-small mb-4"><strong>Job Outlook (10-yr):</strong></p><div style="border-bottom:1.5px solid #ccc;padding:6px;margin-bottom:10px"></div>
+          </div>
+          <div>
+            <p class="text-small mb-4"><strong>Top 5 Skills Required:</strong></p>
+            <div style="border:1.5px solid #ccc;border-radius:6px;min-height:80px;padding:8px;margin-bottom:10px;background:#fafafa"></div>
+            <p class="text-small mb-4"><strong>Education/Training Required:</strong></p>
+            <div style="border:1.5px solid #ccc;border-radius:6px;min-height:70px;padding:8px;background:#fafafa"></div>
+          </div>
+        </div>
+        <p class="text-small mb-4 mt-10"><strong>Daily Tasks (3–4):</strong></p>
+        <div style="border:1.5px solid #ccc;border-radius:6px;min-height:70px;padding:8px;margin-bottom:10px;background:#fafafa"></div>
+        <p class="text-small mb-4"><strong>Personal Connection — Why does this interest or not interest you?</strong></p>
+        <div style="border:1.5px solid #ccc;border-radius:6px;min-height:80px;padding:8px;background:#fafafa"></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="ws10">
+      <div class="card" style="border-top:4px solid var(--orange)">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+          <div><h3>Worksheet 10: Final Project Planning Sheet</h3><p class="text-muted text-small">Name: _________________________ Date: _____________ Period: _____</p></div>
+          <span class="badge badge-orange">Project</span>
+        </div>
+        <div class="grid-2">
+          <div>
+            <p class="text-small mb-4"><strong>My Career Cluster:</strong></p><div style="border-bottom:1.5px solid #ccc;padding:6px;margin-bottom:10px"></div>
+            <p class="text-small mb-4"><strong>My Career Pathway:</strong></p><div style="border-bottom:1.5px solid #ccc;padding:6px;margin-bottom:10px"></div>
+            <p class="text-small mb-4"><strong>My Focus Occupation:</strong></p><div style="border-bottom:1.5px solid #ccc;padding:6px;margin-bottom:10px"></div>
+            <p class="text-small mb-4"><strong>Why I chose this:</strong></p>
+            <div style="border:1.5px solid #ccc;border-radius:6px;min-height:70px;padding:8px;background:#fafafa;margin-bottom:10px"></div>
+          </div>
+          <div>
+            <p class="text-small mb-4"><strong>Format (check one):</strong></p>
+            <div style="border:1.5px solid #ccc;border-radius:8px;padding:10px;margin-bottom:10px">
+              ☐ Slide Deck &nbsp; ☐ Poster &nbsp; ☐ Written Report<br>☐ Video &nbsp; ☐ Brochure &nbsp; ☐ Other: ________
+            </div>
+            <p class="text-small mb-4"><strong>Resources I'll use:</strong></p>
+            <div style="border:1.5px solid #ccc;border-radius:6px;min-height:60px;padding:8px;background:#fafafa;margin-bottom:10px"></div>
+            <p class="text-small mb-4"><strong>Due date:</strong></p><div style="border-bottom:1.5px solid #ccc;padding:6px"></div>
+          </div>
+        </div>
+        <h4 class="mt-10 mb-8">Project Outline — My 5 Main Sections:</h4>
+        <ol class="styled">
+          <li><div style="border-bottom:1.5px solid #ccc;padding:4px;min-height:24px"></div></li>
+          <li><div style="border-bottom:1.5px solid #ccc;padding:4px;min-height:24px"></div></li>
+          <li><div style="border-bottom:1.5px solid #ccc;padding:4px;min-height:24px"></div></li>
+          <li><div style="border-bottom:1.5px solid #ccc;padding:4px;min-height:24px"></div></li>
+          <li><div style="border-bottom:1.5px solid #ccc;padding:4px;min-height:24px"></div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 7 — READING & WRITING LAB
+════════════════════════════════════════════════════════ -->
+<div class="section" id="s7">
+  <div class="sec-header">
+    <h2>✍️ Reading &amp; Writing Lab</h2>
+    <p>Literacy-rich passages, comprehension tasks, and writing prompts to deepen career thinking.</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="tab-group">
+    <div class="tab-btns">
+      <button class="tab-btn active" onclick="switchTab(this,'rw-passages')">📖 Passages</button>
+      <button class="tab-btn" onclick="switchTab(this,'rw-prompts')">✏️ Writing Prompts</button>
+      <button class="tab-btn" onclick="switchTab(this,'rw-timer')">⏱️ Timed Writing</button>
+    </div>
+
+    <div class="tab-panel active" id="rw-passages">
+      <div class="accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">📖 Passage 1: The Science of Career Satisfaction <span class="acc-icon">▾</span></div>
+        <div class="acc-body">
+          <div style="background:#f9f9ff;border-left:4px solid var(--purple);padding:16px;border-radius:0 10px 10px 0;margin-bottom:16px;font-size:.92rem;line-height:1.8">
+            <strong>The Science of Career Satisfaction</strong><br><br>
+            What makes a person truly satisfied in their career? Researchers have studied this question for decades, and the answers might surprise you. For years, people assumed that salary was the top predictor of career satisfaction. But psychologist Frederick Herzberg found something different. He discovered that salary, working conditions, and job security prevented dissatisfaction — but they did not create genuine satisfaction. Real satisfaction, he found, came from intrinsic factors: achievement, recognition, responsibility, advancement, and meaningful work.<br><br>
+            Career development theorist John Holland argued further: people are most satisfied when they work in environments that match their personality type. Holland identified six types — Realistic, Investigative, Artistic, Social, Enterprising, and Conventional (RIASEC) — and found that the closer the match between a person's type and their job environment, the higher their satisfaction, performance, and retention.<br><br>
+            What does this mean for you? It means that choosing a career based purely on salary or family expectations, without considering your interests and values, may leave you unfulfilled — no matter how much you earn. Career exploration in high school is not just academic. It is an investment in your future quality of life.
+          </div>
+          <h4 class="mb-8">Comprehension Questions</h4>
+          <ol class="styled">
+            <li>What assumption about career satisfaction did Herzberg challenge?</li>
+            <li>According to Herzberg, what actually creates genuine career satisfaction?</li>
+            <li>What is the RIASEC model and what does it suggest about career choice?</li>
+            <li>What is the author's central argument? State it in one sentence.</li>
+            <li><strong>Extension:</strong> Do you agree with the author's conclusion? Use evidence from the text and your own experience to support your response.</li>
+          </ol>
+          <textarea class="writing-box mt-16" style="height:150px" placeholder="Write your responses here..."></textarea>
+        </div>
+      </div>
+
+      <div class="accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">📖 Passage 2: Careers in the 21st Century — What's Changing? <span class="acc-icon">▾</span></div>
+        <div class="acc-body">
+          <div style="background:#f9fff9;border-left:4px solid var(--green);padding:16px;border-radius:0 10px 10px 0;margin-bottom:16px;font-size:.92rem;line-height:1.8">
+            <strong>Careers in the 21st Century: What's Changing?</strong><br><br>
+            The world of work is changing faster than at almost any point in history. Advances in artificial intelligence, automation, and global communication are transforming nearly every career cluster. Some jobs that existed 20 years ago are disappearing. New jobs that didn't exist a decade ago now employ millions of people.<br><br>
+            According to the World Economic Forum, more than 85 million jobs may be displaced by automation by 2025, while 97 million new roles may emerge that are better adapted to the new division of labor between humans and machines. The jobs being displaced tend to be repetitive and rule-based. The jobs being created tend to require creativity, complex problem-solving, emotional intelligence, and collaboration.<br><br>
+            This shift has important implications for career planning. Experts increasingly recommend that students focus not just on specific job titles — which may not exist in 10 years — but on clusters of transferable skills: critical thinking, communication, collaboration, creativity, and adaptability. These skills are valuable across all 16 career clusters and remain in demand regardless of which specific technologies are reshaping an industry. The good news: every research paper, group project, debate, and creative assignment you complete in school right now is building the human capabilities that automation cannot easily replace.
+          </div>
+          <h4 class="mb-8">Reading Response — Choose ONE:</h4>
+          <div class="callout challenge">Option A: The author says students should focus on "clusters of transferable skills" rather than specific job titles. Agree or disagree? Support your position.<br><br>Option B: How might the career cluster you're most interested in change due to AI and automation in the next 20 years?</div>
+          <textarea class="writing-box" style="height:150px;margin-top:12px" placeholder="Your response here..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="rw-prompts">
+      <div class="callout tip">Use sentence starters from Section 9 (Differentiation) for students who need scaffolding.</div>
+      <div id="writing-prompts-list"></div>
+    </div>
+
+    <div class="tab-panel" id="rw-timer">
+      <div class="card card-orange">
+        <h3 class="mb-8">⏱️ Timed Writing Challenge</h3>
+        <p class="text-muted mb-16">Choose a prompt, set your timer, and write without stopping!</p>
+        <div class="flex-center mb-16">
+          <button class="btn btn-outline btn-sm" onclick="setTimer(300)" id="t5">5 min</button>
+          <button class="btn btn-outline btn-sm" onclick="setTimer(600)" id="t10">10 min</button>
+          <button class="btn btn-outline btn-sm" onclick="setTimer(900)" id="t15">15 min</button>
+        </div>
+        <div class="timer-display" id="timer-display">5:00</div>
+        <div class="flex-center mb-16" style="gap:8px">
+          <button class="btn btn-primary btn-sm" onclick="startTimer()">▶ Start</button>
+          <button class="btn btn-outline btn-sm" onclick="pauseTimer()">⏸ Pause</button>
+          <button class="btn btn-outline btn-sm" onclick="resetTimer()">↩ Reset</button>
+        </div>
+        <div id="timer-prompt" class="callout challenge mb-16">Which career cluster best fits your personality and why? Use evidence from your interest inventory.</div>
+        <textarea class="writing-box" id="timed-writing-area" style="height:200px" placeholder="Start writing when the timer starts..."></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <span class="text-small text-muted" id="word-count">0 words</span>
+          <button class="btn btn-outline btn-sm" onclick="randomTimerPrompt()">🔀 New Prompt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 8 — ENGAGEMENT STUDIO
+════════════════════════════════════════════════════════ -->
+<div class="section" id="s8">
+  <div class="sec-header">
+    <h2>🎯 Engagement Studio</h2>
+    <p>High-energy, interactive classroom activities designed for discussion, movement, and collaboration.</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-orange" style="cursor:pointer" onclick="openModal('modal-mystery')">
+      <div style="font-size:2rem;margin-bottom:8px">🕵️</div>
+      <h4>Mystery Job</h4>
+      <p class="text-small text-muted">Get clues one at a time and guess the mystery occupation!</p>
+    </div>
+    <div class="card card-blue" style="cursor:pointer" onclick="openModal('modal-speeddating')">
+      <div style="font-size:2rem;margin-bottom:8px">⚡</div>
+      <h4>Career Speed Dating</h4>
+      <p class="text-small text-muted">Rapid-fire partner discussions. Each student becomes a career professional.</p>
+    </div>
+    <div class="card card-green" style="cursor:pointer" onclick="openModal('modal-4corners')">
+      <div style="font-size:2rem;margin-bottom:8px">🗺️</div>
+      <h4>Four Corners Activity</h4>
+      <p class="text-small text-muted">Movement-based discussion. Students move to show their opinions.</p>
+    </div>
+    <div class="card card-purple" style="cursor:pointer" onclick="openModal('modal-debate')">
+      <div style="font-size:2rem;margin-bottom:8px">🗣️</div>
+      <h4>Career Cluster Debate</h4>
+      <p class="text-small text-muted">Teams argue which cluster contributes most to society.</p>
+    </div>
+    <div class="card card-yellow" style="cursor:pointer" onclick="openModal('modal-mixer')">
+      <div style="font-size:2rem;margin-bottom:8px">👋</div>
+      <h4>Find Someone Who… Mixer</h4>
+      <p class="text-small text-muted">Career interest bingo. Circulate and find classmates who share interests.</p>
+    </div>
+    <div class="card card-teal" style="cursor:pointer" onclick="openModal('modal-vision')">
+      <div style="font-size:2rem;margin-bottom:8px">🔮</div>
+      <h4>Design Your Future Vision</h4>
+      <p class="text-small text-muted">Map your ideal future in a visual planning activity.</p>
+    </div>
+  </div>
+
+  <div class="card mt-16" style="text-align:center">
+    <h3 class="mb-8">🎲 Random Challenge Question Generator</h3>
+    <p class="text-muted mb-16">Press the button for a random career thinking challenge!</p>
+    <div id="challenge-display" class="callout challenge" style="font-size:1.05rem;min-height:50px;display:flex;align-items:center;justify-content:center">Click the button below for your challenge!</div>
+    <button class="btn btn-orange mt-16" style="background:linear-gradient(135deg,var(--orange),var(--orange-mid));color:#fff;padding:10px 20px;border:none;border-radius:10px;font-weight:700;cursor:pointer" onclick="newChallenge()">🎲 New Challenge</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 9 — DIFFERENTIATION
+════════════════════════════════════════════════════════ -->
+<div class="section" id="s9">
+  <div class="sec-header">
+    <h2>🌱 Differentiation Supports</h2>
+    <p>Scaffolds, extensions, and accessibility tools for every learner in your classroom.</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="tab-group">
+    <div class="tab-btns">
+      <button class="tab-btn active" onclick="switchTab(this,'diff-scaffold')">📚 Scaffolds</button>
+      <button class="tab-btn" onclick="switchTab(this,'diff-ell')">🌐 ELL</button>
+      <button class="tab-btn" onclick="switchTab(this,'diff-advanced')">🚀 Advanced</button>
+      <button class="tab-btn" onclick="switchTab(this,'diff-starters')">💬 Sentence Starters</button>
+    </div>
+
+    <div class="tab-panel active" id="diff-scaffold">
+      <div class="grid-2">
+        <div class="card card-blue">
+          <h4 class="mb-8">For Students Who Struggle with Reading</h4>
+          <ul class="styled">
+            <li>Pre-teach 10 core vocabulary terms before the unit</li>
+            <li>Provide printed glossaries alongside reading passages</li>
+            <li>Break passages into shorter chunks with stopping points</li>
+            <li>Pair with a reading partner for annotation tasks</li>
+            <li>Offer graphic organizer versions of written responses</li>
+            <li>Allow bullet-point responses instead of full paragraphs</li>
+          </ul>
+        </div>
+        <div class="card card-green">
+          <h4 class="mb-8">For Shy or Reluctant Participants</h4>
+          <ul class="styled">
+            <li>Offer written "silent discussion" options (sticky notes)</li>
+            <li>Allow partner sharing before whole-group sharing</li>
+            <li>Use anonymous polling for sensitive questions</li>
+            <li>Offer written reflection as alternative to verbal presentations</li>
+            <li>Use consistent think-pair-share structure</li>
+          </ul>
+        </div>
+        <div class="card card-yellow">
+          <h4 class="mb-8">For Students with Limited Career Awareness</h4>
+          <ul class="styled">
+            <li>Start with careers students already know from family or community</li>
+            <li>Use Mystery Job activity to build curiosity first</li>
+            <li>Focus on daily tasks before job titles or salaries</li>
+            <li>Connect clusters to students' own neighborhood workers</li>
+          </ul>
+        </div>
+        <div class="card card-orange">
+          <h4 class="mb-8">For Disengaged Students</h4>
+          <ul class="styled">
+            <li>Lead with the salary/lifestyle exploration hook</li>
+            <li>Use gaming/tech angle for IT and STEM clusters</li>
+            <li>Connect to entrepreneurship and independence</li>
+            <li>Offer choice in final project format</li>
+            <li>Use scenario-based activities like a game challenge</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="diff-ell">
+      <div class="card card-teal">
+        <h4 class="mb-8">Supports for English Language Learners</h4>
+        <div class="grid-2">
+          <div>
+            <h5 class="mb-8">Language Scaffolds</h5>
+            <ul class="styled">
+              <li>Provide bilingual glossary of key terms</li>
+              <li>Allow responses in home language first, then translate</li>
+              <li>Pre-teach: cluster, pathway, occupation, credential</li>
+              <li>Use visual representations for all 16 clusters</li>
+              <li>Pair with bilingual peer during group activities</li>
+              <li>Use sentence frames for all written tasks</li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="mb-8">Cultural Connections</h5>
+            <ul class="styled">
+              <li>Compare U.S. career systems with students' home countries</li>
+              <li>Invite students to share family occupations and community roles</li>
+              <li>Highlight diverse professionals within every cluster</li>
+              <li>Discuss how languages and cultural knowledge are career assets</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="diff-advanced">
+      <div class="card card-purple">
+        <h4 class="mb-8">Extension Tasks for Advanced Learners</h4>
+        <ul class="styled mb-16">
+          <li><strong>Labor Market Analysis:</strong> Research employment trends in one cluster and write a brief economic analysis with data.</li>
+          <li><strong>Cross-Cluster Careers:</strong> Identify 5 occupations spanning two or more clusters and explain the overlap.</li>
+          <li><strong>Interview a Professional:</strong> Conduct and transcribe a real or simulated interview.</li>
+          <li><strong>Policy Brief:</strong> Write a 1-page argument for why a specific cluster deserves more school investment.</li>
+          <li><strong>Future Careers:</strong> Research 3 jobs that don't exist yet but likely will in 20 years.</li>
+          <li><strong>Global Analysis:</strong> Compare Germany's apprenticeship system to the U.S. career pathway model.</li>
+          <li><strong>Cluster Expert:</strong> Each advanced student owns one cluster to present to classmates during group work.</li>
+        </ul>
+        <div class="callout tip">Advanced students can also be "Cluster Experts" — owning one cluster to present to classmates.</div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="diff-starters">
+      <div class="card">
+        <h4 class="mb-16">💬 Sentence Starters for Writing &amp; Discussion</h4>
+        <div class="grid-2">
+          <div>
+            <h5 style="color:var(--blue);margin-bottom:8px">For Identifying &amp; Describing</h5>
+            <ul class="styled mb-16">
+              <li>"The career cluster that best fits me is ___ because…"</li>
+              <li>"This occupation belongs to ___ cluster because…"</li>
+              <li>"A career pathway is different from a job because…"</li>
+              <li>"One skill required in the ___ cluster is…"</li>
+            </ul>
+            <h5 style="color:var(--green);margin-bottom:8px">For Comparing</h5>
+            <ul class="styled mb-16">
+              <li>"Both the ___ and ___ cluster require…"</li>
+              <li>"While ___ cluster focuses on ___, the ___ cluster…"</li>
+              <li>"One key difference between these pathways is…"</li>
+            </ul>
+          </div>
+          <div>
+            <h5 style="color:var(--purple);margin-bottom:8px">For Personal Reflection</h5>
+            <ul class="styled mb-16">
+              <li>"My interest in ___ connects to this cluster because…"</li>
+              <li>"Before this unit, I thought… but now I think…"</li>
+              <li>"One strength I have that would help me in this career is…"</li>
+            </ul>
+            <h5 style="color:var(--orange);margin-bottom:8px">For Argumentation</h5>
+            <ul class="styled">
+              <li>"I believe ___ cluster is most important because…"</li>
+              <li>"Evidence from my research shows that…"</li>
+              <li>"A counterargument might be ___, but I think…"</li>
+              <li>"In conclusion, students should explore ___ because…"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 10 — ASSESSMENT TOOLS
+════════════════════════════════════════════════════════ -->
+<div class="section" id="s10">
+  <div class="sec-header">
+    <h2>📊 Assessment Tools</h2>
+    <p>Formative checks, exit tickets, rubrics, and teacher guidance for assessing student learning.</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="tab-group">
+    <div class="tab-btns">
+      <button class="tab-btn active" onclick="switchTab(this,'asm-formative')">📝 Formative Checks</button>
+      <button class="tab-btn" onclick="switchTab(this,'asm-quiz')">❓ Unit Quiz</button>
+      <button class="tab-btn" onclick="switchTab(this,'asm-rubrics')">📊 Rubrics</button>
+      <button class="tab-btn" onclick="switchTab(this,'asm-exit')">🚪 Exit Tickets</button>
+    </div>
+
+    <div class="tab-panel active" id="asm-formative">
+      <div class="grid-2">
+        <div class="card card-blue">
+          <h4 class="mb-8">📊 3-2-1 Reflection Check</h4>
+          <div style="border:1.5px solid var(--border);border-radius:8px;padding:14px">
+            <p style="font-weight:600;margin-bottom:6px">Name: ________________________</p>
+            <p class="text-small">3 things I learned today:</p>
+            <div style="border-bottom:1px solid #ddd;margin:6px 0;padding-bottom:18px"></div>
+            <p class="text-small">2 things I found interesting:</p>
+            <div style="border-bottom:1px solid #ddd;margin:6px 0;padding-bottom:18px"></div>
+            <p class="text-small">1 question I still have:</p>
+            <div style="border-bottom:1px solid #ddd;margin:6px 0;padding-bottom:18px"></div>
+          </div>
+          <div class="callout tip">Address the top 3 student questions at the start of next class.</div>
+        </div>
+        <div class="card card-green">
+          <h4 class="mb-8">👍 Thumbs Check + Quick Write</h4>
+          <div style="display:flex;gap:12px;margin:12px 0">
+            <div style="text-align:center;flex:1;padding:12px;border-radius:10px;background:var(--green-light)"><div style="font-size:1.5rem">👍</div><div class="text-small">Got it!</div></div>
+            <div style="text-align:center;flex:1;padding:12px;border-radius:10px;background:var(--yellow-light)"><div style="font-size:1.5rem">👋</div><div class="text-small">Mostly</div></div>
+            <div style="text-align:center;flex:1;padding:12px;border-radius:10px;background:var(--orange-light)"><div style="font-size:1.5rem">👎</div><div class="text-small">Need help</div></div>
+          </div>
+          <p class="text-small">Follow with: "In 2 sentences, explain what a career pathway is."</p>
+          <div class="callout tip">Group "thumbs down" students for a small-group reteach.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="asm-quiz">
+      <div class="card">
+        <h3 class="mb-8">❓ Unit Knowledge Quiz — 10 Questions</h3>
+        <p class="text-muted mb-16">Test your knowledge of career clusters vocabulary and concepts.</p>
+        <div id="unit-quiz"></div>
+        <button class="btn btn-primary mt-16" onclick="gradeQuiz()">📊 Submit &amp; Grade</button>
+        <div id="quiz-score" style="display:none;margin-top:14px"></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="asm-rubrics">
+      <div class="accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">📊 Final Project Rubric (20 pts) <span class="acc-icon">▾</span></div>
+        <div class="acc-body rubric">
+          <table>
+            <tr><th>Criteria</th><th class="score-4">4 – Exceeds</th><th class="score-3">3 – Meets</th><th class="score-2">2 – Approaching</th><th class="score-1">1 – Beginning</th></tr>
+            <tr><td>Cluster Knowledge</td><td class="score-4">Deep, accurate understanding of cluster, pathways, and multiple occupations with specific details.</td><td class="score-3">Accurately describes cluster, one pathway, several occupations with mostly correct details.</td><td class="score-2">Basic understanding but some vague or inaccurate details.</td><td class="score-1">Little evidence of understanding; significant errors.</td></tr>
+            <tr><td>Personal Connection</td><td class="score-4">Thoughtful, specific connection of personal interests/strengths/values to cluster with strong evidence.</td><td class="score-3">Connects personal profile to cluster with reasonable explanation.</td><td class="score-2">Surface-level connection with limited detail.</td><td class="score-1">Minimal or no personal connection made.</td></tr>
+            <tr><td>Research Quality</td><td class="score-4">Multiple credible sources, all cited, current data accurately integrated.</td><td class="score-3">At least 2 credible sources, citations present, most data accurate.</td><td class="score-2">1 source or not fully credible; some data missing.</td><td class="score-1">No research evidence; no sources cited.</td></tr>
+            <tr><td>Communication</td><td class="score-4">Exceptionally clear, organized, engaging. Academic language used fluently.</td><td class="score-3">Clear and organized. Good academic vocabulary. Minor errors.</td><td class="score-2">Somewhat organized; limited vocabulary; unclear sections.</td><td class="score-1">Difficult to follow; limited vocabulary.</td></tr>
+            <tr><td>Goal Setting</td><td class="score-4">Specific, realistic, detailed action steps with timeline. Genuine forward thinking.</td><td class="score-3">Clear goals with reasonable steps. Shows understanding of next steps.</td><td class="score-2">Goals stated but vague or unrealistic.</td><td class="score-1">No clear goals or planning section.</td></tr>
+          </table>
+          <div style="text-align:right;margin-top:8px"><strong>Total: _____ / 20 points</strong></div>
+        </div>
+      </div>
+      <div class="accordion">
+        <div class="acc-header" onclick="toggleAcc(this)">📊 Presentation Rubric (16 pts) <span class="acc-icon">▾</span></div>
+        <div class="acc-body rubric">
+          <table>
+            <tr><th>Criteria</th><th class="score-4">4</th><th class="score-3">3</th><th class="score-2">2</th><th class="score-1">1</th></tr>
+            <tr><td>Content Accuracy</td><td class="score-4">All information accurate and detailed. Mastery evident.</td><td class="score-3">Most information accurate. Minor errors.</td><td class="score-2">Some inaccuracies; core info present but incomplete.</td><td class="score-1">Significant errors; very little content covered.</td></tr>
+            <tr><td>Organization</td><td class="score-4">Logical, polished flow. Clear intro, body, conclusion.</td><td class="score-3">Mostly organized with clear structure.</td><td class="score-2">Some organizational issues; hard to follow in places.</td><td class="score-1">Disorganized. No clear structure.</td></tr>
+            <tr><td>Delivery</td><td class="score-4">Confident, clear. Strong eye contact. Academic language fluent.</td><td class="score-3">Generally confident. Adequate eye contact.</td><td class="score-2">Reads from notes frequently. Low volume at times.</td><td class="score-1">Very difficult to understand. Minimal preparation.</td></tr>
+            <tr><td>Visual Design</td><td class="score-4">Professional, creative visuals that enhance the message.</td><td class="score-3">Clear and organized visuals. Mostly polished.</td><td class="score-2">Basic visuals; some cluttered or unclear.</td><td class="score-1">Very basic or missing visuals.</td></tr>
+          </table>
+          <div style="text-align:right;margin-top:8px"><strong>Total: _____ / 16 points</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="asm-exit">
+      <div class="grid-2">
+        <div class="card card-yellow"><h4 class="mb-8">Exit Ticket — Day 1</h4><ol class="styled"><li>Define career cluster in your own words.</li><li>Name 2 clusters and 1 job in each.</li><li>What surprised you today?</li></ol></div>
+        <div class="card card-yellow"><h4 class="mb-8">Exit Ticket — Day 3</h4><ol class="styled"><li>List 2 of your top interests from the inventory.</li><li>Which cluster connects to those interests? Explain.</li><li>What does "values" mean in career planning?</li></ol></div>
+        <div class="card card-yellow"><h4 class="mb-8">Exit Ticket — Mid-Unit</h4><ol class="styled"><li>Explain the difference between a cluster and a pathway.</li><li>Give an example: Cluster → Pathway → Occupation.</li><li>Which cluster are you considering for your project?</li></ol></div>
+        <div class="card card-yellow"><h4 class="mb-8">Exit Ticket — Final Day</h4><ol class="styled"><li>Which career cluster interested you most? Why?</li><li>What will you do next to explore your interest?</li><li>What is the most important thing you learned?</li></ol></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 11 — FINAL PROJECT
+════════════════════════════════════════════════════════ -->
+<div class="section" id="s11">
+  <div class="sec-header">
+    <h2>🏆 Final Project: Career Exploration Portfolio</h2>
+    <p>The culminating performance task for this unit.</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="tab-group">
+    <div class="tab-btns">
+      <button class="tab-btn active" onclick="switchTab(this,'proj-overview')">📋 Overview</button>
+      <button class="tab-btn" onclick="switchTab(this,'proj-steps')">📊 Steps</button>
+      <button class="tab-btn" onclick="switchTab(this,'proj-checklist')">✅ Checklist</button>
+      <button class="tab-btn" onclick="switchTab(this,'proj-model')">💡 Sample Model</button>
+      <button class="tab-btn" onclick="switchTab(this,'proj-teacher')">🎓 Teacher Guide</button>
+    </div>
+
+    <div class="tab-panel active" id="proj-overview">
+      <div class="card" style="border-top:4px solid var(--orange)">
+        <div class="badge badge-orange mb-8">Final Performance Task</div>
+        <h3 class="mb-8">Career Exploration Portfolio</h3>
+        <div class="grid-2">
+          <div>
+            <p class="mb-8">You have explored the world of career clusters. Now go deep. Choose one cluster and one specific occupation within it. Research it thoroughly and create a polished presentation or portfolio showing what you've learned — and what it means for <em>you</em>.</p>
+            <div class="callout why-matters">This project combines research, self-awareness, writing, and communication — skills valuable in every career cluster.</div>
+          </div>
+          <div>
+            <table>
+              <tr><td><strong>Format</strong></td><td>Slide deck, poster, video, report, or brochure</td></tr>
+              <tr><td><strong>Length</strong></td><td>8–12 slides or equivalent</td></tr>
+              <tr><td><strong>Sources</strong></td><td>Minimum 2 credible (O*NET, BLS, etc.)</td></tr>
+              <tr><td><strong>Presentation</strong></td><td>3–5 minutes, live or recorded</td></tr>
+              <tr><td><strong>Total Points</strong></td><td>36 points</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="proj-steps">
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><h4>Step 1: Choose Your Cluster &amp; Career (Day 1–2)</h4><p>Review Interest Inventory results. Choose your cluster and one specific occupation. Complete Project Planning Sheet (Worksheet 10).</p></div>
+        <div class="tl-item"><div class="tl-dot" style="background:var(--green)"></div><h4>Step 2: Research (Day 3–5)</h4><p>Use O*NET, BLS Occupational Outlook, and CareerOneStop. Complete Career Research Organizer (Worksheet 9). Collect data on daily tasks, skills, education, salary, and outlook.</p></div>
+        <div class="tl-item"><div class="tl-dot" style="background:var(--purple)"></div><h4>Step 3: Personal Connection (Day 6–7)</h4><p>Write your "Personal Fit" section connecting your interests, strengths, and values to this cluster. Reference your inventory results specifically.</p></div>
+        <div class="tl-item"><div class="tl-dot" style="background:var(--orange)"></div><h4>Step 4: Build Your Product (Day 8–10)</h4><p>Create your presentation, poster, or report. Include all required components from the checklist.</p></div>
+        <div class="tl-item"><div class="tl-dot" style="background:var(--yellow)"></div><h4>Step 5: Revise &amp; Practice (Day 11–12)</h4><p>Peer-review using the checklist. Practice your presentation. Revise for accuracy and clarity.</p></div>
+        <div class="tl-item"><div class="tl-dot" style="background:var(--teal)"></div><h4>Step 6: Present! (Day 13–15)</h4><p>Deliver your 3–5 minute presentation. Listen to peers and take notes for final reflection.</p></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="proj-checklist">
+      <div class="card">
+        <h3 class="mb-8">✅ Student Self-Check Checklist</h3>
+        <p class="text-muted mb-16">Check off each item as you complete it. Don't submit until all boxes are checked!</p>
+        <div id="project-checklist"></div>
+        <div style="margin-top:16px;padding:12px;background:var(--blue-light);border-radius:10px">
+          <strong>Completion: </strong><span id="checklist-count">0</span> of 12 items
+          <div class="progress-bar mt-8"><div class="progress-fill" id="checklist-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="proj-model">
+      <div class="card card-green">
+        <div class="badge badge-green mb-8">📘 Sample Student Model (Condensed)</div>
+        <h3 class="mb-4">Health Science Cluster — Nursing Pathway</h3>
+        <div class="accordion">
+          <div class="acc-header" onclick="toggleAcc(this)">Section 1: Cluster Overview <span class="acc-icon">▾</span></div>
+          <div class="acc-body"><p>The Health Science cluster encompasses occupations related to therapeutic services, diagnostic services, health informatics, support services, and biotechnology research. The Bureau of Labor Statistics projects healthcare occupations to grow 13% through 2031 — much faster than average.</p></div>
+        </div>
+        <div class="accordion">
+          <div class="acc-header" onclick="toggleAcc(this)">Section 2: My Occupation — Registered Nurse <span class="acc-icon">▾</span></div>
+          <div class="acc-body">
+            <p><strong>Daily Tasks:</strong> Assess patient health, administer medications, record symptoms, coordinate care, educate patients and families, respond to emergencies.</p>
+            <p class="mt-8"><strong>Education:</strong> ADN (2 years) or BSN (4 years) + NCLEX-RN licensing exam.</p>
+            <p class="mt-8"><strong>Median Salary:</strong> ~$81,000/year nationally.</p>
+            <p class="mt-8"><strong>Outlook:</strong> 6% growth projected — faster than average.</p>
+          </div>
+        </div>
+        <div class="accordion">
+          <div class="acc-header" onclick="toggleAcc(this)">Section 3: Personal Connection <span class="acc-icon">▾</span></div>
+          <div class="acc-body"><p>On my Interest Inventory, I rated "I enjoy helping people when they are sick or struggling" a 5 out of 5. I also scored high on "working directly with people" (4) and "being useful to others" (5). These align directly with nursing, which requires empathy, interpersonal skills, and a genuine desire to help people at their most vulnerable. My aunt is a nurse, and seeing the meaningful relationships she builds with patients draws me to this career.</p></div>
+        </div>
+        <div class="accordion">
+          <div class="acc-header" onclick="toggleAcc(this)">Section 4: My Action Plan <span class="acc-icon">▾</span></div>
+          <div class="acc-body"><ul class="styled"><li><strong>This year:</strong> Take Biology and volunteer at a clinic.</li><li><strong>Next year:</strong> Take Anatomy and explore CNA training programs.</li><li><strong>After high school:</strong> Attend an ADN or BSN nursing program.</li><li><strong>5 years from now:</strong> Pass NCLEX-RN, work as a staff nurse, explore specializations.</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="proj-teacher">
+      <div class="card card-blue teacher-only">
+        <h3 class="mb-8">🎓 Teacher Guidance: Managing the Final Project</h3>
+        <div class="callout tip">Give students the rubric on Day 1 of the project — not Day 10.</div>
+        <div class="grid-2 mt-16">
+          <div>
+            <h5 class="mb-8">Pacing Suggestions</h5>
+            <ul class="styled">
+              <li>3 full class periods for research (devices needed)</li>
+              <li>1 class period for peer review with checklist</li>
+              <li>2–3 class periods for presentations</li>
+              <li>Build in a rough draft check at Step 3–4</li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="mb-8">Common Issues &amp; Solutions</h5>
+            <ul class="styled">
+              <li><strong>"I don't know what career to choose"</strong> — Direct to interest inventory</li>
+              <li><strong>Student picks unrealistic career</strong> — Encourage it! Research the real pathway</li>
+              <li><strong>No internet access</strong> — Print O*NET career sheets ahead of time</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 12 — PRINT & REVIEW CENTER
+════════════════════════════════════════════════════════ -->
+<div class="section" id="s12">
+  <div class="sec-header">
+    <h2>🖨️ Print &amp; Review Center</h2>
+    <p>Quick reference, printable resources, vocabulary review, and unit summaries.</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="tab-group">
+    <div class="tab-btns">
+      <button class="tab-btn active" onclick="switchTab(this,'pr-vocab')">📝 Vocab Match</button>
+      <button class="tab-btn" onclick="switchTab(this,'pr-clusters')">🗂️ Cluster Cards</button>
+      <button class="tab-btn" onclick="switchTab(this,'pr-quiz')">❓ Mini Quiz</button>
+      <button class="tab-btn" onclick="switchTab(this,'pr-cheat')">🎓 Teacher Sheet</button>
+    </div>
+
+    <div class="tab-panel active" id="pr-vocab">
+      <div class="card">
+        <h3 class="mb-8">📝 Vocabulary Match Game</h3>
+        <p class="text-muted mb-16">Click a term, then click its matching definition. Match all 8 pairs!</p>
+        <div id="vocab-match-game"></div>
+        <div style="margin-top:14px;display:flex;gap:8px;align-items:center">
+          <button class="btn btn-outline btn-sm" onclick="resetVocabGame()">🔄 Reset</button>
+          <span id="vocab-score-display" class="badge badge-green" style="display:none;padding:8px 16px;font-size:.85rem"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="pr-clusters">
+      <div class="callout tip">Print this page for a quick classroom reference card set.</div>
+      <div id="cluster-print-cards" class="grid-3"></div>
+    </div>
+
+    <div class="tab-panel" id="pr-quiz">
+      <div class="card">
+        <h3 class="mb-8">❓ 5-Question Mini Review Quiz</h3>
+        <div id="mini-quiz"></div>
+        <button class="btn btn-primary mt-16" onclick="gradeMiniQuiz()">Check Answers</button>
+        <div id="mini-quiz-result" style="display:none;margin-top:12px"></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="pr-cheat">
+      <div class="card card-blue teacher-only">
+        <h3 class="mb-16">🎓 Teacher Quick Reference — Unit at a Glance</h3>
+        <table>
+          <tr><th>Lesson</th><th>Key Concept</th><th>Main Activity</th><th>Assessment</th></tr>
+          <tr><td>1</td><td>What are career clusters?</td><td>Cluster map + discussion</td><td>Exit ticket: Define cluster</td></tr>
+          <tr><td>2</td><td>Interests, strengths, values</td><td>Interest inventory</td><td>Inventory + reflection</td></tr>
+          <tr><td>3</td><td>Exploring 16 clusters</td><td>Cluster exploration</td><td>Cluster ID worksheet</td></tr>
+          <tr><td>4</td><td>Matching occupations</td><td>Sorting game</td><td>Occupation sort worksheet</td></tr>
+          <tr><td>5</td><td>Reading career profiles</td><td>Annotated reading</td><td>Comprehension worksheet</td></tr>
+          <tr><td>6</td><td>Comparing pathways</td><td>Compare/contrast chart</td><td>Written paragraph</td></tr>
+          <tr><td>7</td><td>Career research</td><td>Research organizer</td><td>Research worksheet</td></tr>
+          <tr><td>8</td><td>Reflection &amp; planning</td><td>Final project work time</td><td>Project + reflection</td></tr>
+        </table>
+        <div class="callout tip mt-16">Post this chart on your teacher desk for easy unit reference.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-mystery">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-mystery')">×</button>
+    <h3 class="mb-8">🕵️ Mystery Job Activity</h3>
+    <p class="text-muted mb-16">Read one clue at a time. Students guess the job. Reveal when 3+ have guessed or all clues shown.</p>
+    <div id="mystery-job-display"></div>
+    <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" onclick="revealNextClue()">Next Clue ▸</button>
+      <button class="btn btn-outline btn-sm" onclick="nextMysteryJob()">New Job 🔀</button>
+      <button class="btn btn-green btn-sm" onclick="revealAnswer()">Reveal Answer ✨</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-speeddating">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-speeddating')">×</button>
+    <h3 class="mb-8">⚡ Career Speed Dating Instructions</h3>
+    <ol class="styled">
+      <li>Each student receives a "career card" with a job title and 3 facts.</li>
+      <li>Students sit in two facing rows or circles.</li>
+      <li>Timer: 90 seconds. Students introduce themselves as their career: <em>"Hi, I'm a [career] and I…"</em></li>
+      <li>After 90 seconds, one row rotates. Repeat 6–8 times.</li>
+      <li>Debrief: "Which career would you most want to learn more about?"</li>
+    </ol>
+    <div class="callout challenge mt-16">Debrief Question: "Which career surprised you the most? Why?"</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-4corners">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-4corners')">×</button>
+    <h3 class="mb-8">🗺️ Four Corners Prompts</h3>
+    <p class="text-small text-muted mb-16">Label corners: Strongly Agree / Agree / Disagree / Strongly Disagree. Read a statement — students move to their corner and explain.</p>
+    <div id="four-corners-prompts"></div>
+    <button class="btn btn-outline btn-sm mt-8" onclick="loadFourCorners()">🔀 Load Prompts</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-debate">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-debate')">×</button>
+    <h3 class="mb-8">🗣️ Career Cluster Debate Format</h3>
+    <p class="text-small text-muted mb-8"><strong>Question:</strong> "Which career cluster contributes most to society?"</p>
+    <ol class="styled mb-16">
+      <li>Divide class into 4–6 groups. Each represents one cluster.</li>
+      <li>Groups get 10 minutes to build their argument.</li>
+      <li>Each group presents their opening argument (2 minutes).</li>
+      <li>Open floor for rebuttals (1 minute per group).</li>
+      <li>Class votes on most compelling argument.</li>
+    </ol>
+    <div class="callout tip">Any cluster can win with strong reasoning — Health vs. STEM vs. Government debates are rich!</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-mixer">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-mixer')">×</button>
+    <h3 class="mb-8">👋 Find Someone Who… Career Mixer</h3>
+    <p class="text-small text-muted mb-16">Circulate and find classmates who match each box. Get a different signature for each.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="border:1.5px solid #ccc;border-radius:8px;padding:10px;font-size:.82rem">…is interested in the Health Science cluster.<br><strong>Name: ________________</strong></div>
+      <div style="border:1.5px solid #ccc;border-radius:8px;padding:10px;font-size:.82rem">…wants to start their own business.<br><strong>Name: ________________</strong></div>
+      <div style="border:1.5px solid #ccc;border-radius:8px;padding:10px;font-size:.82rem">…loves working with technology.<br><strong>Name: ________________</strong></div>
+      <div style="border:1.5px solid #ccc;border-radius:8px;padding:10px;font-size:.82rem">…has a family member in the trades.<br><strong>Name: ________________</strong></div>
+      <div style="border:1.5px solid #ccc;border-radius:8px;padding:10px;font-size:.82rem">…is interested in government or law.<br><strong>Name: ________________</strong></div>
+      <div style="border:1.5px solid #ccc;border-radius:8px;padding:10px;font-size:.82rem">…wants to work with children or families.<br><strong>Name: ________________</strong></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-vision">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-vision')">×</button>
+    <h3 class="mb-8">🔮 Design Your Future Vision Activity</h3>
+    <p class="text-small text-muted mb-16">Sketch or write your vision through these 5 frames:</p>
+    <ol class="styled">
+      <li><strong>Age 25:</strong> Where do you live? What are you doing for work?</li>
+      <li><strong>A typical Tuesday:</strong> What does your day look like?</li>
+      <li><strong>Skills &amp; Tools:</strong> What skills do you use every day?</li>
+      <li><strong>People:</strong> Who do you work with or for?</li>
+      <li><strong>Why it matters:</strong> How does your work make a difference?</li>
+    </ol>
+    <div class="callout challenge">Share with a partner. Listen for the career cluster connections!</div>
+  </div>
+</div>
+
+<footer>
+  <div style="font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:8px">Career Clusters Interactive Teaching &amp; Learning Lab</div>
+  <div>Curriculum Developed &amp; Designed by <span>Hilary Homaii</span></div>
+  <div style="margin-top:6px;opacity:.6;font-size:.78rem">A complete, classroom-ready instructional package for high school career education.</div>
+  <div style="margin-top:10px;opacity:.5;font-size:.75rem">For educational use. Grades 9–12. Career Clusters framework based on the National Career Cluster Initiative.</div>
+</footer>
+
+<script>
+const CLUSTERS=[{name:"Agriculture, Food & Natural Resources",icon:"🌱",color:"#2d8a4e",desc:"Food production, farming, forestry, and environmental management.",pathways:["Agribusiness","Animal Systems","Environmental Service","Food Products & Processing","Natural Resources","Plant Systems"],jobs:["Agricultural Engineer","Crop Scientist","Veterinarian","Conservation Scientist","Food Scientist","Farm Manager"]},{name:"Architecture & Construction",icon:"🏗️",color:"#c0392b",desc:"Designing, building, and maintaining structures.",pathways:["Construction","Design & Pre-Construction","Maintenance & Operations"],jobs:["Architect","Civil Engineer","Electrician","Plumber","Construction Manager","Interior Designer"]},{name:"Arts, A/V Technology & Communications",icon:"🎨",color:"#8e44ad",desc:"Creative expression through design, media, and communications.",pathways:["Audio & Video Technology","Journalism","Performing Arts","Visual Arts","Telecommunications"],jobs:["Graphic Designer","Film Director","Journalist","Animator","Sound Engineer","Game Designer"]},{name:"Business Management & Administration",icon:"💼",color:"#2c3e50",desc:"Planning, organizing, and leading business operations.",pathways:["Administrative Support","Business Information Management","General Management","Human Resources"],jobs:["Business Manager","HR Specialist","Operations Analyst","Project Manager","Entrepreneur"]},{name:"Education & Training",icon:"📚",color:"#1a6bcc",desc:"Teaching, training, and educational services for all ages.",pathways:["Administration & Support","Professional Support Services","Teaching & Training"],jobs:["K-12 Teacher","School Counselor","Instructional Designer","Librarian","Corporate Trainer"]},{name:"Finance",icon:"💰",color:"#d4920a",desc:"Financial planning, banking, insurance, and business finance.",pathways:["Accounting","Banking Services","Business Finance","Insurance","Securities & Investments"],jobs:["Financial Advisor","Accountant","Bank Manager","Actuary","Investment Analyst"]},{name:"Government & Public Administration",icon:"🏛️",color:"#1a5276",desc:"Government services, public policy, and administration.",pathways:["Foreign Service","Governance","National Security","Planning","Public Management"],jobs:["City Planner","Policy Analyst","Diplomat","Government Administrator","Military Officer"]},{name:"Health Science",icon:"🏥",color:"#922b21",desc:"All aspects of therapeutic services, diagnostics, and health research.",pathways:["Biotechnology Research","Diagnostic Services","Health Informatics","Therapeutic Services"],jobs:["Registered Nurse","Physician","Physical Therapist","Medical Lab Tech","Pharmacist","Radiologic Tech"]},{name:"Hospitality & Tourism",icon:"✈️",color:"#0d7377",desc:"Lodging, restaurants, tourism, and event management.",pathways:["Lodging","Recreation & Attractions","Restaurants & Food","Travel & Tourism"],jobs:["Hotel Manager","Chef","Event Planner","Travel Agent","Restaurant Manager"]},{name:"Human Services",icon:"🤝",color:"#6c3483",desc:"Services that meet human needs through personal care and counseling.",pathways:["Consumer Services","Counseling & Mental Health","Early Childhood Dev.","Family & Community Services"],jobs:["Social Worker","School Counselor","Child Care Director","Psychologist","Community Health Worker"]},{name:"Information Technology",icon:"💻",color:"#154360",desc:"Designing, implementing, and managing technology systems.",pathways:["Information Support","Network Systems","Programming & Software Dev.","Web & Digital Communications"],jobs:["Software Developer","Cybersecurity Analyst","Network Engineer","Data Scientist","UX Designer","Cloud Architect"]},{name:"Law, Public Safety, Corrections & Security",icon:"⚖️",color:"#1b4f72",desc:"Legal services, public safety, and emergency response.",pathways:["Correction Services","Emergency & Fire Management","Law Enforcement","Legal Services","Security Services"],jobs:["Police Officer","Attorney","Firefighter","Paramedic","Judge","Security Analyst"]},{name:"Manufacturing",icon:"⚙️",color:"#784212",desc:"Production, processing, and quality control of manufactured products.",pathways:["Health, Safety & Environmental Assurance","Maintenance","Manufacturing Production","Product Development","Quality Assurance"],jobs:["Manufacturing Engineer","Quality Control Tech","CNC Machinist","Industrial Designer","Production Manager","Robotics Tech"]},{name:"Marketing",icon:"📣",color:"#6e2f80",desc:"Marketing, advertising, distribution, and sales.",pathways:["Marketing Communications","Marketing Management","Marketing Research","Merchandising","Professional Sales"],jobs:["Marketing Manager","Market Research Analyst","Brand Strategist","Digital Marketer","Sales Manager","Social Media Manager"]},{name:"Science, Technology, Engineering & Math",icon:"🔬",color:"#1e6b4a",desc:"Scientific research, engineering design, and mathematical applications.",pathways:["Engineering & Technology","Science & Math"],jobs:["Biomedical Engineer","Environmental Scientist","Aerospace Engineer","Mathematician","Geologist","Research Chemist"]},{name:"Transportation, Distribution & Logistics",icon:"🚚",color:"#935116",desc:"Planning, managing, and moving people and goods.",pathways:["Facility & Mobile Equipment Maintenance","Logistics Planning","Sales & Service","Transportation Operations"],jobs:["Airline Pilot","Logistics Manager","Supply Chain Analyst","Transportation Planner","Railroad Engineer"]}];
+
+const VOCAB_TERMS=[{term:"Career Cluster",def:"A broad grouping of related careers sharing common knowledge and skills"},{term:"Career Pathway",def:"A sequence of courses and experiences leading to careers in a cluster"},{term:"Occupation",def:"A specific type of job or work performed by a person"},{term:"Credential",def:"A certificate, license, or degree verifying skills or education"},{term:"Aptitude",def:"A natural ability or talent in a given area"},{term:"Transferable Skills",def:"Skills usable across multiple jobs and industries"},{term:"Labor Market",def:"The supply and demand for workers in the economy"},{term:"Interest Inventory",def:"A tool that identifies personal interests to connect to careers"},{term:"Values",def:"Beliefs and principles that guide decisions and priorities"},{term:"Post-secondary",def:"Education or training after high school"},{term:"Specialization",def:"Focusing on a specific area within a broader field"},{term:"Licensure",def:"Official permission granted to practice a profession"},{term:"Portfolio",def:"A collection of work demonstrating skills and growth"},{term:"Entrepreneurship",def:"Starting and running one's own business venture"},{term:"Work-Based Learning",def:"Hands-on career experiences tied to school curriculum"},{term:"Industry",def:"A category of economic activity or business sector"},{term:"Job Outlook",def:"Projected growth or decline of employment in an occupation"},{term:"Apprenticeship",def:"Structured job training combining work and instruction"},{term:"Salary",def:"Fixed regular payment for employment, typically annual"},{term:"Internship",def:"Temporary supervised work experience often for students"}];
+
+const WRITING_PROMPTS=[{title:"Which cluster fits you?",prompt:"Which career cluster best fits your personality, interests, and values? Use specific evidence from your interest inventory and at least two details about the cluster to support your answer. Write 1–2 paragraphs.",level:"All Levels"},{title:"Connections to School",prompt:"Choose one career cluster and explain which school subjects are most important for success in it. Why do those subjects matter? Give specific examples of skills that would be used.",level:"All Levels"},{title:"Never Considered Before",prompt:"Identify one career you had never seriously considered before this unit. What did you learn about it that surprised or interested you? Would you consider it now? Why or why not?",level:"All Levels"},{title:"Benefits & Challenges",prompt:"Choose one career cluster and analyze both the benefits and the challenges of working in that field. Consider: job satisfaction, salary, work environment, education required, and job security.",level:"Intermediate"},{title:"Technology's Impact",prompt:"How is technology changing one career cluster of your choice? What new jobs are being created? What jobs might disappear? Use evidence from your reading and research.",level:"Advanced"},{title:"Career Path Letter",prompt:"Write a letter from your future self at age 30 to your current self. You are working in a career cluster you explored in this unit. Describe your daily work, why you chose this path, and advice you'd give yourself now.",level:"Creative"},{title:"Opinion: School Preparation",prompt:"Does high school adequately prepare students for the career cluster of their choice? Write a structured argument with at least two pieces of evidence and one counterargument.",level:"Advanced"},{title:"My Career Values",prompt:"What matters most to you in a future career: salary, helping others, creativity, independence, or stability? Rank your top three career values and explain why each matters. Connect to a career cluster.",level:"All Levels"}];
+
+const TIMER_PROMPTS=["Which career cluster best fits your personality and why?","If you could shadow any professional for a day, who would it be and what would you hope to learn?","Describe your ideal work environment in vivid detail. What cluster does it suggest?","What is the difference between a job and a career? Why does it matter?","If salary didn't matter at all, what career would you choose and why?","Write about a person in your life whose career has inspired you.","What skill do you already have that would be valuable in multiple career clusters?","Describe a problem in the world you'd like to solve through your future career."];
+
+const CHALLENGE_QUESTIONS=["Name 5 careers in the Health Science cluster. Which one surprises most people?","A doctor and a hospital administrator both work in healthcare. Are they in the same cluster? Why or why not?","What career cluster would a video game developer most likely belong to? What about a game story writer?","How might someone in the Architecture & Construction cluster use math differently than someone in Finance?","Name one career that could plausibly belong to THREE different career clusters.","What is the connection between Education & Training and every other career cluster?","Which career cluster do you think will have the most job growth in the next 20 years? Why?","Could someone with an interest in art work in the STEM cluster? Give a specific example.","What does a credential look like in Manufacturing vs. in Law?","How could skills from Hospitality & Tourism transfer to Business Management?","Name 3 careers in the Human Services cluster that did not exist 50 years ago.","What career cluster would a professional esports player belong to? Defend your answer."];
+
+const MYSTERY_JOBS=[{title:"Forensic Scientist",cluster:"Law, Public Safety, Corrections & Security",clues:["I work in a laboratory almost every day.","I help solve crimes, but I'm rarely at the crime scene.","I analyze evidence like fingerprints, DNA, and fibers.","My work helps lawyers argue cases in court.","I need a degree in biology, chemistry, or forensic science."]},{title:"UX Designer",cluster:"Information Technology",clues:["I never write code, but I work in the tech industry.","I study how people interact with apps and websites.","I create sketches and prototypes before anything is built.","My goal is to make technology easy and pleasant to use.","My job title has three letters as its first word."]},{title:"Epidemiologist",cluster:"Health Science",clues:["I study patterns and causes of diseases in populations.","I was very busy during a certain global pandemic.","I use statistics and data more than a stethoscope.","I help governments decide on public health policies.","My job name comes from the Greek word for epidemic."]},{title:"Logistics Manager",cluster:"Transportation, Distribution & Logistics",clues:["I figure out the fastest, cheapest way to get things from A to B.","I work with warehouses, shipping companies, and suppliers.","If you ordered something online, I helped it reach your door.","I use complex software to track thousands of shipments.","I work in an office, not a truck."]},{title:"Agricultural Engineer",cluster:"Agriculture, Food & Natural Resources",clues:["I design machines and systems used on farms.","I solve problems like irrigation, storage, and soil erosion.","I combine engineering with knowledge of plants and animals.","I may work outdoors, in offices, and in laboratories.","I need an engineering degree with a very specific specialty."]}];
+
+const FOUR_CORNERS_PROMPTS=["Every high school student should be required to take a career exploration class.","Salary should be the most important factor when choosing a career.","It is better to specialize in one career area than to have broad skills.","The best careers require a 4-year college degree.","Students should be allowed to choose their own career pathway in high school.","Career exploration should begin in middle school."];
+
+const UNIT_QUIZ_DATA=[{q:"What is a career cluster?",opts:["A specific job title","A broad grouping of related careers sharing common knowledge","A list of college majors","A job application form"],ans:1},{q:"Which of the following is a career PATHWAY (not a cluster)?",opts:["Health Science","Therapeutic Services","Agriculture","Finance"],ans:1},{q:"An 'interest inventory' is best described as:",opts:["A list of job salaries","A test that identifies your hobbies","A tool to connect personal interests to career options","A college application requirement"],ans:2},{q:"Which cluster would a Software Developer most likely belong to?",opts:["Manufacturing","Business Management","Information Technology","Finance"],ans:2},{q:"A 'credential' refers to:",opts:["Your work experience","A certificate, license, or degree verifying your skills","Your personality type","Your career values"],ans:1},{q:"'Transferable skills' are best described as:",opts:["Skills that can only be used in one job","Skills you're born with","Skills usable across multiple jobs and industries","Skills listed on a college application"],ans:2},{q:"Which is NOT one of the 16 national career clusters?",opts:["Hospitality & Tourism","Digital Media & Entertainment","Marketing","Human Services"],ans:1},{q:"The correct order from broadest to most specific is:",opts:["Occupation → Pathway → Cluster","Pathway → Cluster → Occupation","Cluster → Pathway → Occupation","Occupation → Cluster → Pathway"],ans:2},{q:"According to career research, genuine job satisfaction comes mainly from:",opts:["Salary and benefits","Intrinsic factors like achievement and meaningful work","Job security","Office location"],ans:1},{q:"A student high on 'I enjoy helping people when sick' likely fits which cluster?",opts:["Manufacturing","Information Technology","Health Science","Hospitality & Tourism"],ans:2}];
+
+const MINI_QUIZ_DATA=[{q:"Career clusters were primarily created to help students:",opts:["Choose college majors","Connect coursework to real career outcomes","Fill out job applications","Decide on sports teams"],ans:1},{q:"A Registered Nurse is in which pathway of Health Science?",opts:["Diagnostic Services","Health Informatics","Therapeutic Services","Biotechnology Research"],ans:2},{q:"Post-secondary education refers to:",opts:["Middle school","High school","Education after high school","Online learning only"],ans:2},{q:"Which cluster focuses on designing and building structures?",opts:["Manufacturing","Architecture & Construction","Government","Transportation"],ans:1},{q:"Numbers, budgets, and financial planning best fits which cluster?",opts:["Arts & Communications","Human Services","Finance","Education & Training"],ans:2}];
+
+const PROJECT_CHECKLIST_ITEMS=["I have chosen my career cluster and written it on my planning sheet.","I have chosen one specific occupation within my cluster.","I have explained WHY I chose this cluster based on my interest inventory.","I have researched my occupation using at least 2 credible sources.","I have recorded the median salary and job outlook for my occupation.","I have identified at least 5 skills required in my occupation.","I have described the education/training pathway for this occupation.","I have described 3–4 typical daily tasks of this occupation.","I have written a personal connection section linking my profile to this career.","I have created 3+ specific action steps for my career plan.","My visual product is organized and clearly labeled.","I have practiced my presentation and it is 3–5 minutes long."];
+
+const LESSONS=[{title:"Introduction to Career Clusters",time:"50 min",obj:"Students will define career cluster, identify the 16 national clusters, and explain why they matter.",warmup:"Ask: 'What do you think a career cluster is?' Write 2 minutes, then share. Display answers on board.",instruction:"Introduce the concept using the 'neighborhood' metaphor. Walk through all 16 clusters using visual cards. Use teacher script from Section 3.",guided:"Students complete Part A & B of Introductory Worksheet (Worksheet 1) in pairs.",independent:"Students rank the top 5 clusters they want to learn more about.",discussion:["Why might it be helpful to organize thousands of jobs into groups?","Is any career cluster more important than others?","Could one job belong to more than one cluster?"],closing:"Exit Ticket: Define career cluster. Name 3 clusters.",homework:"Interview a family member: Which career cluster does their job belong to?",differentiation:"ELL: Visual cluster reference sheet. Advanced: Research one cluster in depth."},{title:"Interests, Strengths, Values & Personality",time:"55 min",obj:"Students will complete an interest inventory and connect results to possible career clusters.",warmup:"Quick poll: What matters most in a future job? Use the built-in site poll for class discussion.",instruction:"Explain the four self-awareness components: interests, strengths, values, personality. Share Holland's RIASEC theory.",guided:"Students complete Interest & Strengths Inventory (Worksheet 3) individually.",independent:"Students analyze their top scores and write a reflection connecting to clusters.",discussion:["Do your interests change as you get older?","Is it better to choose a career you love or one that pays well?","Can someone be good at a career they don't love?"],closing:"Students share one insight from their inventory with a partner.",homework:"Ask someone you trust: 'What is my biggest strength?' Write what they say.",differentiation:"Struggling readers: pair for inventory. Advanced: Complete Holland RIASEC research."},{title:"Exploring the Major Career Clusters",time:"60 min",obj:"Students will explore at least 8 clusters in depth and identify sample occupations in each.",warmup:"'Mystery Job' warm-up: Give 3 clues about an occupation. Students guess the cluster.",instruction:"Tour of all 16 clusters using the interactive Explore Clusters activity. Emphasize pathways within clusters.",guided:"Gallery walk: Students rotate and add jobs they know to each cluster posted around room.",independent:"Students complete Career Cluster Identification Worksheet (Worksheet 4).",discussion:["Which cluster surprised you most with its variety of jobs?","Which clusters are most present in your local community?","Are any careers in a cluster that you wouldn't expect?"],closing:"Students write the 3 clusters they want to explore for their final project.",homework:"Look up one job in a cluster of interest. Write 3 facts about it.",differentiation:"Visual learners: Cluster icon cards. Advanced: Find a career that spans two clusters."},{title:"Matching Occupations to Clusters",time:"50 min",obj:"Students will accurately match occupations to their correct clusters with evidence-based reasoning.",warmup:"Quick write: Where would you put a Forensic Scientist? A Fashion Designer? Explain.",instruction:"Model the thinking process for identifying cluster membership. Look for knowledge, skills, and work environment clues.",guided:"Students complete Occupation Sorting Worksheet (Worksheet 5) in small groups.",independent:"Students complete the digital Sorting Game in Section 5.",discussion:["What clues tell you which cluster an occupation belongs to?","Why might some occupations fit in more than one cluster?","Does the cluster change what education you need?"],closing:"Students share their most difficult sort and explain their reasoning.",homework:"Find 2 occupations in a cluster of interest. Bring evidence of their pathway.",differentiation:"Scaffold: Cluster keyword list provided. Advanced: Find 3 cross-cluster occupations and justify each."},{title:"Reading and Analyzing Career Profiles",time:"55 min",obj:"Students will read career profile texts and identify key information using close reading strategies.",warmup:"Vocabulary preview: pre-teach diagnostic, therapeutic, logistics, infrastructure.",instruction:"Model close reading: Read once for gist, twice for evidence, three times for questions.",guided:"Students read Passage 1 with annotation guide. Partner discussion of comprehension questions.",independent:"Students complete Reading Comprehension Worksheet (Worksheet 6).",discussion:["What was the author's main argument? Do you agree?","What evidence was most convincing in the passage?","What questions does the reading raise that aren't answered?"],closing:"3-2-1 exit ticket: 3 things learned, 2 interesting, 1 question.",homework:"Find a real article about a career in your interest area. Annotate it.",differentiation:"Struggling: Guided reading with stopping points. Advanced: Write a response essay."},{title:"Comparing Career Pathways",time:"60 min",obj:"Students will compare two career pathways using graphic organizers and write a structured paragraph.",warmup:"Think-pair-share: How is a career pathway different from just choosing a job?",instruction:"Model pathway comparison using Health Science and IT clusters. Show how pathways lead to different but related occupations.",guided:"Students choose 2 clusters and complete Compare & Contrast Worksheet (Worksheet 7) with Venn diagram.",independent:"Students draft comparison paragraph using sentence starters from Section 9.",discussion:["Which pathway requires more education? Is that better or worse?","Could you switch pathways mid-career? How?","What is the value of having a pathway vs. just one job goal?"],closing:"Students read their paragraph to a partner for peer feedback.",homework:"Revise the comparison paragraph based on peer feedback.",differentiation:"Scaffold: Sentence starters provided. Advanced: Analyze salary and job growth differences."},{title:"Career Research and Presentation Prep",time:"60 min",obj:"Students will conduct structured career research and begin organizing their final project.",warmup:"Quick share: What career are you most seriously considering for your project? Why?",instruction:"Walk through research process: how to use O*NET, BLS, and CareerOneStop. Model evaluating sources.",guided:"Students complete Career Research Organizer (Worksheet 9) using devices or printed resources.",independent:"Students complete Project Planning Sheet (Worksheet 10) and begin their final project outline.",discussion:["What makes a source credible for career research?","What surprised you in your research?","How does the actual data compare to your assumptions?"],closing:"Students share one data point they found surprising.",homework:"Complete research. Begin building your final project product.",differentiation:"Limited internet: Print O*NET career summaries. Advanced: Find primary sources and interviews."},{title:"Reflection and Future Planning",time:"50 min",obj:"Students will synthesize unit learning, reflect on personal growth, and articulate actionable future steps.",warmup:"Reflection prompt: Complete this sentence: Before this unit, I thought careers were… Now I think…",instruction:"Discuss career readiness: it's not about having all the answers, it's about having a direction and a process.",guided:"Students complete Reflection Worksheet (Worksheet 8) individually.",independent:"Students finalize action steps in their Final Project and prepare for presentations.",discussion:["Has your thinking about your future changed? How?","What is the most useful thing you learned?","What do you wish this unit had covered?"],closing:"Students write a 3-sentence 'career vision statement' for their future self.",homework:"Finish and polish your final project for presentation day.",differentiation:"Struggling: Guided reflection with sentence starters. Advanced: Write a career development essay."}];
+
+const SORT_ITEMS=[{job:"Radiologic Technologist",cluster:"Health Science"},{job:"Software Developer",cluster:"Information Technology"},{job:"High School Teacher",cluster:"Education & Training"},{job:"Financial Analyst",cluster:"Finance"},{job:"Film Editor",cluster:"Arts, A/V & Communications"},{job:"Police Officer",cluster:"Law, Public Safety & Security"},{job:"Structural Engineer",cluster:"Architecture & Construction"},{job:"Hotel Manager",cluster:"Hospitality & Tourism"},{job:"Social Worker",cluster:"Human Services"},{job:"Supply Chain Manager",cluster:"Transportation & Logistics"},{job:"Marketing Manager",cluster:"Marketing"},{job:"City Planner",cluster:"Government & Public Administration"}];
+const SORT_CLUSTERS=["Health Science","Information Technology","Education & Training","Finance","Arts, A/V & Communications","Law, Public Safety & Security"];
+const INTEREST_ITEMS=[{text:"I enjoy helping people who are sick, injured, or struggling",cluster:7},{text:"I love working with technology, apps, or computers",cluster:10},{text:"I like explaining ideas or teaching things I know to others",cluster:4},{text:"I find numbers, budgets, and financial planning interesting",cluster:5},{text:"I enjoy creative work — designing, drawing, writing, or performing",cluster:2},{text:"I care deeply about justice, laws, and keeping people safe",cluster:11},{text:"I'm fascinated by how things are built or engineered",cluster:1},{text:"I like working with plants, animals, food, or the environment",cluster:0},{text:"I enjoy planning events, hosting people, or managing hospitality experiences",cluster:8},{text:"I love solving scientific problems or conducting research",cluster:14},{text:"I'm interested in business, leadership, and organizational management",cluster:3},{text:"I find marketing, advertising, and persuasion interesting",cluster:13},{text:"I care about public service, government, and community leadership",cluster:6},{text:"I like working with my hands to create or repair physical things",cluster:12},{text:"I'm interested in transportation, logistics, or supply chain work",cluster:15},{text:"I want to help people with their emotional or social challenges",cluster:9}];
+const SCENARIOS=[{name:"Marcus",desc:"Marcus loves spending time in the kitchen. He watches cooking videos for hours, experiments with recipes, and dreams of opening a restaurant someday. He's organized, creative, and loves making people happy with food.",answer:"Hospitality & Tourism",explain:"Marcus's passion for cooking, restaurant goals, and desire to create experiences for others aligns with the Hospitality & Tourism cluster, specifically the Restaurant & Food/Beverage pathway."},{name:"Aisha",desc:"Aisha has always been fascinated by how things work inside the body. She excels in biology and chemistry, volunteers at a local clinic, and wants to understand diseases at a molecular level.",answer:"Health Science",explain:"Aisha's interest in biology, clinical settings, and disease mechanisms points to Health Science. She might explore the Biotechnology Research or Therapeutic Services pathway."},{name:"Jordan",desc:"Jordan is the person everyone calls when their computer breaks. He taught himself to code at age 12, loves cybersecurity puzzles, and wants to protect systems from hackers.",answer:"Information Technology",explain:"Jordan's self-taught coding, cybersecurity interest, and problem-solving mindset fit the Information Technology cluster, specifically the Network Systems or Programming pathway."},{name:"Sofia",desc:"Sofia is passionate about fairness and equality. She participates in student government, loves debate, and wants to change policies that affect her community.",answer:"Government & Public Administration / Law",explain:"Sofia's civic engagement, debate skills, and desire for policy change fit both Government & Public Administration and Law, Public Safety, Corrections & Security."},{name:"Tyrese",desc:"Tyrese can fix almost anything mechanical. He loves working in his uncle's auto shop on weekends and is curious about how things are designed and manufactured at scale.",answer:"Manufacturing / Transportation",explain:"Tyrese's mechanical aptitude and hands-on skills fit Manufacturing or Transportation, Distribution & Logistics — particularly maintenance and engineering pathways."}];
+
+let visitedSections=new Set([1]),dragItem=null;
+let timerInterval,timerSecs=300,timerRunning=false,timerMax=300;
+let currentMystery=0,currentClue=0;
+let vocabSelected=null,vocabScore=0;
+let shuffledVocab=[...VOCAB_TERMS];
+
+function showSection(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-tabs a').forEach(a=>a.classList.remove('active'));if(el)el.classList.add('active');visitedSections.add(parseInt(id.replace('s','')));updateProgress();window.scrollTo({top:0,behavior:'smooth'});}
+function updateProgress(){const pct=Math.round(visitedSections.size/12*100);document.getElementById('pt-fill').style.width=pct+'%';document.getElementById('pt-label').textContent=visitedSections.size+' of 12 sections';if(visitedSections.size>=6&&!document.getElementById('badge-explorer')){const b=document.createElement('div');b.id='badge-explorer';b.className='badge-earned';b.innerHTML='🏅 Explorer!';b.style.marginTop='6px';document.getElementById('pt-badges').appendChild(b);}if(visitedSections.size>=12&&!document.getElementById('badge-master')){const b=document.createElement('div');b.id='badge-master';b.className='badge-earned';b.innerHTML='🏆 Master!';b.style.marginTop='6px';document.getElementById('pt-badges').appendChild(b);}}
+function setView(mode,el){document.body.className='';if(mode==='teacher')document.body.classList.add('teacher-view');else if(mode==='student')document.body.classList.add('student-view');document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');}
+function switchTab(btn,panelId){const group=btn.closest('.tab-group');group.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));group.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');const panel=document.getElementById(panelId);if(panel)panel.classList.add('active');}
+function toggleAcc(header){header.classList.toggle('open');header.nextElementSibling.classList.toggle('open');}
+let pollVotes={};
+function pollSelect(el,key){el.classList.toggle('selected');pollVotes[key]=(pollVotes[key]||0)+(el.classList.contains('selected')?1:-1);}
+function showPollResults(){const keys=['interests','strengths','values','personality','opportunities','goals'];const labels={'interests':'💚 Interests','strengths':'💪 Strengths','values':'❤️ Values','personality':'🧠 Personality','opportunities':'🚪 Opportunities','goals':'🎯 Goals'};const total=Object.values(pollVotes).reduce((a,b)=>a+b,0)||1;let html='<div class="mb-8"><strong>Poll Results:</strong></div>';keys.forEach(k=>{const v=pollVotes[k]||0;const pct=Math.round(v/total*100);html+=`<div class="poll-bar-wrap"><div class="poll-bar-label">${labels[k]} — ${pct}%</div><div class="poll-bar" style="width:${Math.max(pct,8)}%">${pct}%</div></div>`;});html+='<p class="text-small text-muted" style="margin-top:10px">All of these factors shape career choices!</p>';const r=document.getElementById('poll-results');r.innerHTML=html;r.style.display='block';}
+
+function buildClusterQuickGrid(){const g=document.getElementById('cluster-quick-grid');if(!g)return;g.innerHTML=CLUSTERS.map(c=>`<div class="cluster-card" style="border-top-color:${c.color}" onclick="showSection('s5',document.querySelectorAll('.nav-tabs a')[4])"><div class="icon">${c.icon}</div><h4>${c.name}</h4></div>`).join('');}
+function buildExploreGrid(){const g=document.getElementById('explore-grid');if(!g)return;g.innerHTML=CLUSTERS.map((c,i)=>`<div class="cluster-card" style="border-top-color:${c.color}" onclick="showClusterDetail(${i})"><div class="icon">${c.icon}</div><h4>${c.name}</h4><p>${c.jobs.slice(0,2).join(' • ')}</p></div>`).join('');}
+function showClusterDetail(i){const c=CLUSTERS[i];const panel=document.getElementById('cluster-detail-panel');const content=document.getElementById('cluster-detail-content');content.innerHTML=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div style="font-size:2.5rem">${c.icon}</div><div><h3 style="color:${c.color}">${c.name}</h3><p class="text-muted text-small">${c.desc}</p></div></div><div class="grid-2"><div><h5 class="mb-8">Career Pathways</h5><ul class="styled">${c.pathways.map(p=>`<li>${p}</li>`).join('')}</ul></div><div><h5 class="mb-8">Sample Occupations</h5><ul class="styled">${c.jobs.map(j=>`<li>${j}</li>`).join('')}</ul></div></div>`;panel.style.display='block';panel.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function buildClusterReference(){const g=document.getElementById('cluster-reference-grid');if(!g)return;g.innerHTML=CLUSTERS.map(c=>`<div class="accordion" style="border-left:4px solid ${c.color}"><div class="acc-header" onclick="toggleAcc(this)"><span>${c.icon} ${c.name}</span><span class="acc-icon">▾</span></div><div class="acc-body"><p class="mb-8">${c.desc}</p><div class="grid-2"><div><strong class="text-small">Pathways:</strong><ul class="styled">${c.pathways.map(p=>`<li>${p}</li>`).join('')}</ul></div><div><strong class="text-small">Sample Occupations:</strong><ul class="styled">${c.jobs.map(j=>`<li>${j}</li>`).join('')}</ul></div></div></div></div>`).join('');}
+function buildClusterPrintCards(){const g=document.getElementById('cluster-print-cards');if(!g)return;g.innerHTML=CLUSTERS.map(c=>`<div class="card" style="border-top:4px solid ${c.color};padding:14px"><div style="font-size:1.8rem;margin-bottom:4px">${c.icon}</div><h4 style="color:${c.color};margin-bottom:6px;font-size:.85rem">${c.name}</h4><p style="font-size:.78rem;color:var(--muted);margin-bottom:8px">${c.desc}</p><div style="font-size:.75rem"><strong>Sample careers:</strong> ${c.jobs.slice(0,4).join(', ')}</div></div>`).join('');}
+
+function buildInterestInventory(){const div=document.getElementById('interest-inventory');if(!div)return;div.innerHTML=INTEREST_ITEMS.map((item,i)=>`<div style="padding:12px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:var(--white)"><p style="font-size:.88rem;font-weight:600;margin-bottom:8px">${i+1}. ${item.text}</p><div style="display:flex;gap:8px;flex-wrap:wrap">${[1,2,3,4,5].map(n=>`<label style="display:flex;align-items:center;gap:4px;font-size:.82rem;cursor:pointer"><input type="radio" name="ii_${i}" value="${n}" style="accent-color:var(--blue)"> ${n}</label>`).join('')}</div></div>`).join('');}
+function calcInterest(){const scores=new Array(16).fill(0);INTEREST_ITEMS.forEach((item,i)=>{const sel=document.querySelector(`input[name="ii_${i}"]:checked`);if(sel)scores[item.cluster]+=parseInt(sel.value);});const top3=[...scores.keys()].sort((a,b)=>scores[b]-scores[a]).slice(0,3);const div=document.getElementById('interest-results');div.innerHTML=`<h4 class="mb-8">📊 Your Top 3 Career Cluster Matches</h4>${top3.map((ci,rank)=>`<div class="card" style="border-left:5px solid ${CLUSTERS[ci].color};margin-bottom:12px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span style="font-size:1.8rem">${CLUSTERS[ci].icon}</span><div><h4 style="color:${CLUSTERS[ci].color}">#${rank+1}: ${CLUSTERS[ci].name}</h4><div class="progress-bar" style="width:200px"><div class="progress-fill" style="width:${Math.round(scores[ci]/25*100)}%;background:${CLUSTERS[ci].color}"></div></div></div></div><p class="text-small">${CLUSTERS[ci].desc}</p><p class="text-small mt-8"><strong>Sample careers:</strong> ${CLUSTERS[ci].jobs.slice(0,4).join(' • ')}</p></div>`).join('')}<div class="callout challenge mt-12">These results are a starting point, not a final answer. Explore all three before deciding!</div>`;div.style.display='block';div.scrollIntoView({behavior:'smooth'});}
+
+function buildFlashcards(){const g=document.getElementById('flashcard-grid');if(!g)return;g.innerHTML=shuffledVocab.map((v,i)=>`<div class="flashcard" id="fc_${i}" onclick="this.classList.toggle('flipped')"><div class="fc-inner"><div class="fc-front">${v.term}</div><div class="fc-back">${v.def}</div></div></div>`).join('');}
+function flipAllCards(){document.querySelectorAll('.flashcard').forEach(fc=>fc.classList.toggle('flipped'));}
+function shuffleFlashcards(){shuffledVocab=shuffledVocab.sort(()=>Math.random()-.5);buildFlashcards();}
+
+function buildSortGame(){const pool=document.getElementById('sort-cards-pool');const targets=document.getElementById('sort-targets');if(!pool||!targets)return;const shuffled=[...SORT_ITEMS].sort(()=>Math.random()-.5);pool.innerHTML=shuffled.map(item=>`<div class="drag-card" draggable="true" data-job="${item.job}" data-cluster="${item.cluster}" ondragstart="dragStart(event)" ondragend="dragEnd(event)">${item.job}</div>`).join('');targets.innerHTML=SORT_CLUSTERS.map(c=>`<div class="card" style="padding:12px"><h5 style="margin-bottom:8px;font-size:.82rem;color:var(--blue)">${c}</h5><div class="drag-area" data-target="${c}" ondragover="dragOver(event)" ondrop="drop(event)" ondragleave="dragLeave(event)"></div></div>`).join('');}
+function dragStart(e){dragItem=e.target;dragItem.classList.add('dragging');e.dataTransfer.effectAllowed='move';}
+function dragEnd(e){e.target.classList.remove('dragging');}
+function dragOver(e){e.preventDefault();e.currentTarget.classList.add('over');}
+function dragLeave(e){e.currentTarget.classList.remove('over');}
+function drop(e){e.preventDefault();e.currentTarget.classList.remove('over');if(dragItem)e.currentTarget.appendChild(dragItem);}
+function checkSortAnswers(){let correct=0,total=0;document.querySelectorAll('.drag-area').forEach(area=>{const target=area.dataset.target;area.querySelectorAll('.drag-card').forEach(card=>{total++;const isCorrect=card.dataset.cluster===target||(target.includes('Law')&&card.dataset.cluster.includes('Law'))||(target.includes('Arts')&&card.dataset.cluster.includes('Arts'))||(target.includes('Transportation')&&card.dataset.cluster.includes('Transportation'));card.style.background=isCorrect?'var(--green-light)':'var(--orange-light)';card.style.borderColor=isCorrect?'var(--green)':'var(--orange)';if(isCorrect)correct++;});});document.getElementById('sort-result').innerHTML=`<div class="badge badge-${correct>=total*.7?'green':'orange'}" style="font-size:.9rem;padding:8px 16px">${correct}/${total} correct! ${correct>=total*.7?'Great job! 🎉':'Keep trying! 💪'}</div>`;}
+function resetSort(){buildSortGame();document.getElementById('sort-result').innerHTML='';}
+
+function buildScenarios(){const div=document.getElementById('scenario-cards');if(!div)return;div.innerHTML=SCENARIOS.map((s,i)=>`<div class="card" style="margin-bottom:14px;border-left:5px solid var(--blue)"><div class="badge badge-green mb-8">Scenario ${i+1}</div><h4 class="mb-8">${s.name}'s Story</h4><p style="font-size:.9rem;margin-bottom:12px;font-style:italic">"${s.desc}"</p><p style="font-weight:600;font-size:.88rem;margin-bottom:8px">Which career cluster BEST fits ${s.name}? Explain:</p><textarea class="writing-box" style="height:70px;margin-bottom:10px" placeholder="Write your answer..."></textarea><button class="btn btn-outline btn-sm" onclick="toggleSampleAns(this,'sa_${i}')">💡 See Sample Answer</button><div id="sa_${i}" style="display:none" class="callout why-matters mt-8"><strong>Best Fit: ${s.answer}</strong><br>${s.explain}</div></div>`).join('');}
+function toggleSampleAns(btn,id){const div=document.getElementById(id);div.style.display=div.style.display==='none'?'block':'none';btn.textContent=div.style.display==='none'?'💡 See Sample Answer':'🔼 Hide Answer';}
+
+function buildWritingPrompts(){const div=document.getElementById('writing-prompts-list');if(!div)return;div.innerHTML=WRITING_PROMPTS.map((p,i)=>`<div class="accordion"><div class="acc-header" onclick="toggleAcc(this)"><span>✏️ Prompt ${i+1}: ${p.title} <span class="badge badge-${p.level==='Advanced'?'purple':p.level==='Intermediate'?'blue':'green'}" style="margin-left:8px">${p.level}</span></span><span class="acc-icon">▾</span></div><div class="acc-body"><div class="callout challenge" style="margin-bottom:12px">${p.prompt}</div><textarea class="writing-box" style="height:150px" placeholder="Write your response here..."></textarea></div></div>`).join('');}
+
+function setTimer(secs){timerSecs=secs;timerMax=secs;timerRunning=false;clearInterval(timerInterval);updateTimerDisplay();['5','10','15'].forEach(n=>{const btn=document.getElementById('t'+n);if(btn)btn.classList.remove('active');});const btn=document.getElementById('t'+(secs/60));if(btn)btn.classList.add('active');}
+function startTimer(){if(timerRunning)return;timerRunning=true;timerInterval=setInterval(()=>{timerSecs--;updateTimerDisplay();if(timerSecs<=0){clearInterval(timerInterval);timerRunning=false;alert('⏱️ Time is up! Great work!');}},1000);}
+function pauseTimer(){clearInterval(timerInterval);timerRunning=false;}
+function resetTimer(){clearInterval(timerInterval);timerRunning=false;timerSecs=timerMax;updateTimerDisplay();}
+function updateTimerDisplay(){const m=Math.floor(timerSecs/60),s=timerSecs%60;const d=document.getElementById('timer-display');if(!d)return;d.textContent=m+':'+String(s).padStart(2,'0');d.classList.toggle('urgent',timerSecs<=30);}
+function randomTimerPrompt(){const p=TIMER_PROMPTS[Math.floor(Math.random()*TIMER_PROMPTS.length)];const d=document.getElementById('timer-prompt');if(d)d.textContent=p;}
+document.addEventListener('input',function(e){if(e.target.id==='timed-writing-area'){const words=e.target.value.trim().split(/\s+/).filter(w=>w.length>0).length;const wc=document.getElementById('word-count');if(wc)wc.textContent=words+' words';}});
+
+function newChallenge(){const q=CHALLENGE_QUESTIONS[Math.floor(Math.random()*CHALLENGE_QUESTIONS.length)];const d=document.getElementById('challenge-display');if(d)d.textContent=q;}
+
+function buildMysteryJob(){showMysteryJob();}
+function showMysteryJob(){currentClue=0;const mj=MYSTERY_JOBS[currentMystery];const div=document.getElementById('mystery-job-display');if(!div)return;div.innerHTML=`<div class="callout tip mb-12">Career Cluster: <strong>${mj.cluster}</strong></div><div id="clues-shown"><p class="text-muted">Click "Next Clue" to begin...</p></div><div id="mystery-answer" style="display:none" class="callout why-matters mt-8"><strong>🎉 Answer: ${mj.title}</strong> — ${mj.cluster} cluster!</div>`;}
+function revealNextClue(){const mj=MYSTERY_JOBS[currentMystery];const div=document.getElementById('clues-shown');if(!div||currentClue>=mj.clues.length)return;div.innerHTML=mj.clues.slice(0,currentClue+1).map((c,i)=>`<div class="callout challenge" style="margin-bottom:6px">Clue ${i+1}: ${c}</div>`).join('');currentClue++;}
+function revealAnswer(){const d=document.getElementById('mystery-answer');if(d)d.style.display='block';}
+function nextMysteryJob(){currentMystery=(currentMystery+1)%MYSTERY_JOBS.length;showMysteryJob();}
+
+function openModal(id){document.getElementById(id).classList.add('open');if(id==='modal-mystery')buildMysteryJob();if(id==='modal-4corners')loadFourCorners();}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function loadFourCorners(){const div=document.getElementById('four-corners-prompts');if(!div)return;div.innerHTML=FOUR_CORNERS_PROMPTS.map(p=>`<div class="callout challenge" style="margin-bottom:8px">"${p}"</div>`).join('');}
+
+function buildUnitQuiz(){const div=document.getElementById('unit-quiz');if(!div)return;div.innerHTML=UNIT_QUIZ_DATA.map((q,i)=>`<div class="quiz-q"><p>${i+1}. ${q.q}</p><div class="quiz-opts">${q.opts.map((o,j)=>`<label><input type="radio" name="uq_${i}" value="${j}"> ${o}</label>`).join('')}</div></div>`).join('');}
+function gradeQuiz(){let score=0;UNIT_QUIZ_DATA.forEach((q,i)=>{const sel=document.querySelector(`input[name="uq_${i}"]:checked`);if(sel&&parseInt(sel.value)===q.ans)score++;document.querySelectorAll(`input[name="uq_${i}"]`).forEach((inp,j)=>{inp.parentElement.style.background=j===q.ans?'var(--green-light)':'';if(sel&&parseInt(sel.value)===j&&j!==q.ans)inp.parentElement.style.background='var(--orange-light)';});});const div=document.getElementById('quiz-score');const pct=Math.round(score/UNIT_QUIZ_DATA.length*100);div.innerHTML=`<div class="badge badge-${pct>=80?'green':pct>=60?'yellow':'orange'}" style="font-size:1rem;padding:12px 20px">Score: ${score}/${UNIT_QUIZ_DATA.length} (${pct}%) ${pct>=80?'🏆 Excellent!':pct>=60?'👍 Good!':'💪 Keep studying!'}</div>`;div.style.display='block';}
+
+function buildMiniQuiz(){const div=document.getElementById('mini-quiz');if(!div)return;div.innerHTML=MINI_QUIZ_DATA.map((q,i)=>`<div class="quiz-q"><p>${i+1}. ${q.q}</p><div class="quiz-opts">${q.opts.map((o,j)=>`<label><input type="radio" name="mq_${i}" value="${j}"> ${o}</label>`).join('')}</div></div>`).join('');}
+function gradeMiniQuiz(){let score=0;MINI_QUIZ_DATA.forEach((q,i)=>{const sel=document.querySelector(`input[name="mq_${i}"]:checked`);if(sel&&parseInt(sel.value)===q.ans)score++;document.querySelectorAll(`input[name="mq_${i}"]`).forEach((inp,j)=>{inp.parentElement.style.background=j===q.ans?'var(--green-light)':'';if(sel&&parseInt(sel.value)===j&&j!==q.ans)inp.parentElement.style.background='var(--orange-light)';});});const div=document.getElementById('mini-quiz-result');div.innerHTML=`<div class="badge badge-${score>=4?'green':score>=3?'yellow':'orange'}" style="font-size:.95rem;padding:10px 18px">Score: ${score}/5 ${score>=4?'🏆 Excellent!':'💪 Review and try again!'}</div>`;div.style.display='block';}
+
+const VOCAB_GAME_PAIRS=VOCAB_TERMS.slice(0,8);
+function buildVocabMatchGame(){const div=document.getElementById('vocab-match-game');if(!div)return;vocabScore=0;vocabSelected=null;const sd=document.getElementById('vocab-score-display');if(sd)sd.style.display='none';const terms=VOCAB_GAME_PAIRS.map((v,i)=>({text:v.term,type:'term',id:i}));const defs=VOCAB_GAME_PAIRS.map((v,i)=>({text:v.def,type:'def',id:i}));const all=[...terms,...defs].sort(()=>Math.random()-.5);div.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px">${all.map((item,idx)=>`<div class="occ-tag" id="vg_${idx}" data-type="${item.type}" data-id="${item.id}" style="text-align:left;font-weight:${item.type==='term'?'700':'400'};min-height:50px;display:flex;align-items:center" onclick="vocabClick(this)">${item.text}</div>`).join('')}</div>`;}
+function vocabClick(el){if(el.style.pointerEvents==='none')return;if(!vocabSelected){vocabSelected=el;el.style.background='#dbeafe';el.style.borderColor='var(--blue)';}else{if(el===vocabSelected){vocabSelected.style.background='';vocabSelected.style.borderColor='';vocabSelected=null;return;}if(vocabSelected.dataset.id===el.dataset.id&&vocabSelected.dataset.type!==el.dataset.type){[vocabSelected,el].forEach(e=>{e.style.background='var(--green-light)';e.style.borderColor='var(--green)';e.style.pointerEvents='none';});vocabScore++;if(vocabScore===VOCAB_GAME_PAIRS.length){const sd=document.getElementById('vocab-score-display');if(sd){sd.textContent='🏆 All matched!';sd.style.display='inline-block';}}}else{const vs=vocabSelected,ev=el;[vs,ev].forEach(e=>{e.style.background='var(--orange-light)';e.style.borderColor='var(--orange)';});setTimeout(()=>{[vs,ev].forEach(e=>{e.style.background='';e.style.borderColor='';});},600);}vocabSelected=null;}}
+function resetVocabGame(){buildVocabMatchGame();}
+
+function buildProjectChecklist(){const div=document.getElementById('project-checklist');if(!div)return;div.innerHTML=PROJECT_CHECKLIST_ITEMS.map((item,i)=>`<div class="checklist-item" id="ci_${i}"><input type="checkbox" id="cb_${i}" onchange="updateChecklist()"><label for="cb_${i}" style="font-size:.9rem;cursor:pointer">${item}</label></div>`).join('');}
+function updateChecklist(){const total=PROJECT_CHECKLIST_ITEMS.length;const checked=document.querySelectorAll('#project-checklist input:checked').length;document.getElementById('checklist-count').textContent=checked;document.getElementById('checklist-fill').style.width=Math.round(checked/total*100)+'%';document.querySelectorAll('.checklist-item').forEach((item,i)=>{item.classList.toggle('done',document.getElementById('cb_'+i)?.checked);});}
+
+function buildLessons(){const container=document.getElementById('lessons-container');if(!container)return;container.innerHTML=LESSONS.map((lesson,i)=>`<div class="accordion" style="border-left:5px solid var(--blue)"><div class="acc-header" onclick="toggleAcc(this)"><span><strong>Lesson ${i+1}:</strong> ${lesson.title} <span class="badge badge-blue" style="margin-left:8px">⏱ ${lesson.time}</span></span><span class="acc-icon">▾</span></div><div class="acc-body"><div class="grid-2 mb-16"><div class="callout tip" style="margin:0"><strong>Objective:</strong> ${lesson.obj}</div><div class="callout challenge" style="margin:0"><strong>🌡️ Warm-Up:</strong> ${lesson.warmup}</div></div><div class="tab-group"><div class="tab-btns"><button class="tab-btn active" onclick="switchTab(this,'l${i}_instr')">📖 Instruction</button><button class="tab-btn" onclick="switchTab(this,'l${i}_disc')">💬 Discussion</button><button class="tab-btn" onclick="switchTab(this,'l${i}_close')">🚪 Closing</button><button class="tab-btn" onclick="switchTab(this,'l${i}_diff')">🌱 Differentiation</button></div><div class="tab-panel active" id="l${i}_instr"><div class="callout tip mb-8"><strong>Direct Instruction:</strong> ${lesson.instruction}</div><div class="callout challenge mb-8"><strong>Guided Practice:</strong> ${lesson.guided}</div><div class="callout real-world"><strong>Independent Activity:</strong> ${lesson.independent}</div></div><div class="tab-panel" id="l${i}_disc"><h5 class="mb-8">Discussion Questions</h5><ol class="styled">${lesson.discussion.map(d=>`<li>${d}</li>`).join('')}</ol></div><div class="tab-panel" id="l${i}_close"><div class="grid-2"><div class="callout tip"><strong>Closing:</strong> ${lesson.closing}</div><div class="callout challenge"><strong>Homework:</strong> ${lesson.homework}</div></div></div><div class="tab-panel" id="l${i}_diff"><div class="callout why-matters"><strong>Differentiation:</strong> ${lesson.differentiation}</div></div></div></div></div>`).join('');}
+
+function searchContent(query){if(!query.trim())return;}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  buildClusterQuickGrid();
+  buildExploreGrid();
+  buildClusterReference();
+  buildClusterPrintCards();
+  buildInterestInventory();
+  buildFlashcards();
+  buildSortGame();
+  buildScenarios();
+  buildWritingPrompts();
+  buildUnitQuiz();
+  buildMiniQuiz();
+  buildLessons();
+  buildProjectChecklist();
+  buildVocabMatchGame();
+  updateTimerDisplay();
+  newChallenge();
+  setTimer(300);
+});
+</script>
+</body>
+</html>
